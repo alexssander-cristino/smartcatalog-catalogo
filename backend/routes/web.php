@@ -15,7 +15,7 @@ Route::get('/', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Rotas de autenticação Breeze
+| Rotas de autenticação
 |--------------------------------------------------------------------------
 */
 
@@ -29,27 +29,33 @@ require __DIR__.'/auth.php';
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('auth')->prefix('admin')->group(function () {
+Route::middleware('auth')
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Dashboard
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get(
+            '/dashboard',
+            [DashboardController::class, 'index']
+        )->name('dashboard');
 
 
-    Route::get('/dashboard', [
-        DashboardController::class,
-        'index'
-    ])
-    ->name('admin.dashboard');
 
+        /*
+        |--------------------------------------------------------------------------
+        | Categorias
+        |--------------------------------------------------------------------------
+        */
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Categorias
-    |--------------------------------------------------------------------------
-    */
-
-    Route::resource(
-        'categorias',
-        CategoriaController::class
-    );
-
+        Route::resource(
+            'categorias',
+            CategoriaController::class
+        );
 
 });

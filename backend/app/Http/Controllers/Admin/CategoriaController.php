@@ -14,9 +14,7 @@ class CategoriaController extends Controller
     public function index()
     {
 
-        $categorias = Categoria::orderBy('nome')
-            ->get();
-
+        $categorias = Categoria::orderBy('nome')->get();
 
         return view(
             'admin.categorias.index',
@@ -47,32 +45,44 @@ class CategoriaController extends Controller
 
         $request->validate([
 
-            'nome'=>'required|max:255',
-            'descricao'=>'nullable',
-            'ativo'=>'boolean'
+            'nome' => 'required|max:255',
+
+            'descricao' => 'nullable',
+
+            'ativo' => 'boolean'
 
         ]);
-
 
 
         Categoria::create([
 
-            'nome'=>$request->nome,
+            'nome' => $request->nome,
 
-            'descricao'=>$request->descricao,
+            'descricao' => $request->descricao,
 
-            'ativo'=>$request->ativo ?? false
+            'ativo' => $request->boolean('ativo')
 
         ]);
 
 
-
         return redirect()
-            ->route('categorias.index')
+            ->route('admin.categorias.index')
             ->with(
                 'success',
-                'Categoria criada com sucesso.'
+                'Categoria cadastrada com sucesso.'
             );
+
+    }
+
+
+
+
+
+    public function show(Categoria $categoria)
+    {
+
+        return redirect()
+            ->route('admin.categorias.index');
 
     }
 
@@ -94,23 +104,40 @@ class CategoriaController extends Controller
 
 
 
-    public function update(Request $request, Categoria $categoria)
+    public function update(
+        Request $request,
+        Categoria $categoria
+    )
     {
 
-        $categoria->update([
+        $request->validate([
 
-            'nome'=>$request->nome,
+            'nome' => 'required|max:255',
 
-            'descricao'=>$request->descricao,
+            'descricao' => 'nullable',
 
-            'ativo'=>$request->ativo ?? false
+            'ativo' => 'boolean'
 
         ]);
 
 
+        $categoria->update([
+
+            'nome' => $request->nome,
+
+            'descricao' => $request->descricao,
+
+            'ativo' => $request->boolean('ativo')
+
+        ]);
+
 
         return redirect()
-            ->route('categorias.index');
+            ->route('admin.categorias.index')
+            ->with(
+                'success',
+                'Categoria atualizada com sucesso.'
+            );
 
     }
 
@@ -124,9 +151,12 @@ class CategoriaController extends Controller
         $categoria->delete();
 
 
-
         return redirect()
-            ->route('categorias.index');
+            ->route('admin.categorias.index')
+            ->with(
+                'success',
+                'Categoria removida com sucesso.'
+            );
 
     }
 
