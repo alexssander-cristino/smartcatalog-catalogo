@@ -1,30 +1,259 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="pt-BR">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+<meta charset="UTF-8">
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
-            </div>
-        </div>
-    </body>
+<title>
+SmartCatalog
+</title>
+
+
+<style>
+
+
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+
+}
+
+
+
+body{
+
+    min-height:100vh;
+
+    background:
+    linear-gradient(
+        135deg,
+        #111827,
+        #2563eb
+    );
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+
+
+
+.container{
+
+    width:100%;
+
+    max-width:420px;
+
+    padding:20px;
+
+}
+
+
+
+
+.logo{
+
+    text-align:center;
+
+    color:white;
+
+    font-size:32px;
+
+    font-weight:bold;
+
+    margin-bottom:25px;
+
+}
+
+
+
+.logo span{
+
+    color:#93c5fd;
+
+}
+
+
+
+
+
+.card{
+
+    background:white;
+
+    padding:35px;
+
+    border-radius:16px;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.25);
+
+}
+
+
+
+
+h1{
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+    color:#111827;
+
+}
+
+
+
+
+label{
+
+    display:block;
+
+    margin-bottom:6px;
+
+    color:#374151;
+
+    font-weight:bold;
+
+}
+
+
+
+
+
+input{
+
+    width:100%;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    border:1px solid #d1d5db;
+
+    margin-bottom:15px;
+
+    font-size:15px;
+
+}
+
+
+
+input:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+}
+
+
+
+
+
+button{
+
+    width:100%;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:13px;
+
+    border-radius:8px;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+
+
+button:hover{
+
+    background:#1d4ed8;
+
+}
+
+
+
+
+
+a{
+
+    color:#2563eb;
+
+    text-decoration:none;
+
+}
+
+
+
+
+
+.links{
+
+    margin-top:20px;
+
+    text-align:center;
+
+    font-size:14px;
+
+}
+
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+
+<div class="logo">
+
+Smart<span>Catalog</span>
+
+</div>
+
+
+
+<div class="card">
+
+
+{{ $slot }}
+
+
+</div>
+
+
+</div>
+
+
+</body>
+
+
 </html>

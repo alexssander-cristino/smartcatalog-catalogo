@@ -4,11 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\Storage;
+
 
 class ProdutoImagem extends Model
 {
     use HasFactory;
+
+
+    protected $table = 'produto_imagens';
+
 
 
     protected $fillable = [
@@ -26,16 +30,24 @@ class ProdutoImagem extends Model
 
     public function produto()
     {
-        return $this->belongsTo(Produto::class);
+        return $this->belongsTo(
+            Produto::class,
+            'produto_id'
+        );
     }
-
 
 
 
     public function getUrlAttribute()
     {
-        return Storage::disk('public')
-            ->url($this->imagem);
+        if (!$this->imagem) {
+            return null;
+        }
+
+
+        return asset(
+            'storage/' . $this->imagem
+        );
     }
 
 }
