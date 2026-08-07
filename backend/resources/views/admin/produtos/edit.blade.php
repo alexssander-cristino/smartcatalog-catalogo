@@ -1,59 +1,53 @@
 @extends('admin.layouts.app')
 
-
 @section('content')
 
 
-<div class="header">
+<div class="card">
 
-    <h1>
-        Editar Produto
-    </h1>
 
-</div>
+<h1>
+    ✏️ Editar Produto
+</h1>
 
 
 
 @if(session('success'))
 
-<div class="card"
-style="
+<div style="
 background:#dcfce7;
 color:#166534;
-padding:15px;
-margin-bottom:20px;
+padding:12px;
+border-radius:8px;
+margin:15px 0;
 ">
 
-    {{ session('success') }}
+{{ session('success') }}
 
 </div>
 
 @endif
+
+
 
 
 
 
 @if($errors->any())
 
-<div class="card"
-style="
+<div style="
 background:#fee2e2;
 color:#991b1b;
-padding:15px;
-margin-bottom:20px;
+padding:12px;
+border-radius:8px;
+margin:15px 0;
 ">
-
-<ul style="margin:0;padding-left:20px;">
 
 @foreach($errors->all() as $error)
 
-<li>
-{{ $error }}
-</li>
+<p>{{ $error }}</p>
 
 @endforeach
-
-</ul>
 
 </div>
 
@@ -63,19 +57,14 @@ margin-bottom:20px;
 
 
 
-<div class="card">
 
-
-<h2>
-Dados do Produto
-</h2>
-
-
-<br>
 
 
 <form method="POST"
-action="{{ route('admin.produtos.update',$produto) }}">
+
+action="{{ route('admin.produtos.update',$produto->id) }}"
+
+enctype="multipart/form-data">
 
 
 @csrf
@@ -84,11 +73,11 @@ action="{{ route('admin.produtos.update',$produto) }}">
 
 
 
+
+
 <label>
 Categoria
 </label>
-
-<br>
 
 
 <select
@@ -96,25 +85,30 @@ name="categoria_id"
 required
 style="
 width:100%;
-padding:10px;
-">
-
-
-<option value="">
-Selecione uma categoria
-</option>
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-top:8px;
+margin-bottom:15px;
+"
+>
 
 
 @foreach($categorias as $categoria)
 
+
 <option
+
 value="{{ $categoria->id }}"
-{{ old('categoria_id',$produto->categoria_id) == $categoria->id ? 'selected' : '' }}
+
+{{ $produto->categoria_id == $categoria->id ? 'selected' : '' }}
+
 >
 
 {{ $categoria->nome }}
 
 </option>
+
 
 @endforeach
 
@@ -123,7 +117,36 @@ value="{{ $categoria->id }}"
 
 
 
-<br><br>
+
+
+
+
+<label>
+Código SKU
+</label>
+
+
+<input
+
+type="text"
+
+name="sku"
+
+value="{{ old('sku',$produto->sku) }}"
+
+style="
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-top:8px;
+margin-bottom:15px;
+"
+
+>
+
+
+
 
 
 
@@ -132,45 +155,30 @@ value="{{ $categoria->id }}"
 Nome
 </label>
 
-<br>
-
 
 <input
+
 type="text"
+
 name="nome"
+
 value="{{ old('nome',$produto->nome) }}"
+
 required
+
 style="
 width:100%;
-padding:10px;
-">
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-top:8px;
+margin-bottom:15px;
+"
+
+>
 
 
 
-<br><br>
-
-
-
-
-<label>
-Código
-</label>
-
-<br>
-
-
-<input
-type="text"
-name="codigo"
-value="{{ old('codigo',$produto->codigo) }}"
-style="
-width:100%;
-padding:10px;
-">
-
-
-
-<br><br>
 
 
 
@@ -179,21 +187,28 @@ padding:10px;
 Marca
 </label>
 
-<br>
-
 
 <input
+
 type="text"
+
 name="marca"
+
 value="{{ old('marca',$produto->marca) }}"
+
 style="
 width:100%;
-padding:10px;
-">
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-top:8px;
+margin-bottom:15px;
+"
+
+>
 
 
 
-<br><br>
 
 
 
@@ -202,93 +217,172 @@ padding:10px;
 Descrição
 </label>
 
-<br>
-
 
 <textarea
+
 name="descricao"
+
+rows="5"
+
 style="
 width:100%;
-height:120px;
-padding:10px;
-">{{ old('descricao',$produto->descricao) }}</textarea>
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-top:8px;
+margin-bottom:15px;
+"
+
+>{{ old('descricao',$produto->descricao) }}</textarea>
 
 
 
-<br><br>
 
 
 
-<div style="
-display:flex;
-gap:20px;
-">
-
-
-<div style="flex:1">
 
 
 <label>
-Preço
+Preço normal
 </label>
-
-<br>
 
 
 <input
+
 type="number"
-name="preco"
+
 step="0.01"
+
+name="preco"
+
 value="{{ old('preco',$produto->preco) }}"
+
+required
+
 style="
 width:100%;
-padding:10px;
-">
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-top:8px;
+margin-bottom:15px;
+"
+
+>
 
 
-</div>
 
 
 
-<div style="flex:1">
+
+
+<label>
+Preço promocional
+</label>
+
+
+<input
+
+type="number"
+
+step="0.01"
+
+name="preco_promocional"
+
+value="{{ old('preco_promocional',$produto->preco_promocional) }}"
+
+style="
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-top:8px;
+margin-bottom:15px;
+"
+
+>
+
+
+
+
+
 
 
 <label>
 Estoque
 </label>
 
-<br>
+
+<input
+
+type="number"
+
+name="estoque"
+
+value="{{ old('estoque',$produto->estoque) }}"
+
+required
+
+style="
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-top:8px;
+margin-bottom:15px;
+"
+
+>
+
+
+
+
+
+
+
+<label>
+Unidade
+</label>
 
 
 <input
-type="number"
-name="estoque"
-value="{{ old('estoque',$produto->estoque) }}"
+
+type="text"
+
+name="unidade"
+
+value="{{ old('unidade',$produto->unidade) }}"
+
 style="
 width:100%;
-padding:10px;
-">
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-top:8px;
+margin-bottom:15px;
+"
+
+>
 
 
-</div>
-
-
-</div>
 
 
 
-
-<br><br>
 
 
 
 <label>
 
 <input
+
 type="checkbox"
+
 name="ativo"
+
 value="1"
+
 {{ $produto->ativo ? 'checked' : '' }}
+
 >
 
 Produto ativo
@@ -296,16 +390,24 @@ Produto ativo
 </label>
 
 
-<br><br>
+
+
+<br>
+
 
 
 <label>
 
 <input
+
 type="checkbox"
+
 name="destaque"
+
 value="1"
+
 {{ $produto->destaque ? 'checked' : '' }}
+
 >
 
 Produto em destaque
@@ -314,40 +416,55 @@ Produto em destaque
 
 
 
+
+
+
+
 <br><br>
 
-
-
 <button
+
+type="submit"
+
 style="
 background:#2563eb;
 color:white;
 border:none;
 padding:12px 25px;
-border-radius:6px;
+border-radius:8px;
+font-weight:bold;
 cursor:pointer;
-">
+"
 
-Atualizar Produto
+>
+
+💾 Atualizar Produto
 
 </button>
 
 
 
+
+
 <a
+
 href="{{ route('admin.produtos.index') }}"
+
 style="
 background:#64748b;
 color:white;
 padding:12px 25px;
-border-radius:6px;
+border-radius:8px;
 text-decoration:none;
 font-weight:bold;
 margin-left:15px;
 display:inline-block;
 "
+
 >
+
 Cancelar
+
 </a>
 
 
@@ -355,34 +472,35 @@ Cancelar
 </form>
 
 
-</div>
 
 
 
 
 
+<hr style="margin:30px 0;">
 
 
-<div class="card"
-style="margin-top:30px;">
+
 
 
 <h2>
-Imagens do Produto
+📷 Imagens do Produto
 </h2>
 
 
 
-<p>
-Adicione imagens para o catálogo.
-</p>
-
 
 
 <form
+
 method="POST"
-action="{{ route('admin.produtos.imagem.store',$produto) }}"
+
+action="{{ route('admin.produtos.imagem.store',$produto->id) }}"
+
 enctype="multipart/form-data"
+
+style="margin-top:15px;"
+
 >
 
 
@@ -391,32 +509,37 @@ enctype="multipart/form-data"
 
 
 <input
+
 type="file"
+
 name="imagem"
+
 accept="image/*"
+
 required
+
 >
 
 
 
-<br><br>
-
-
-
 <button
+
+type="submit"
+
 style="
 background:#16a34a;
 color:white;
 border:none;
 padding:10px 20px;
-border-radius:6px;
+border-radius:8px;
 cursor:pointer;
-">
+"
+
+>
 
 Adicionar Imagem
 
 </button>
-
 
 
 </form>
@@ -425,52 +548,47 @@ Adicionar Imagem
 
 
 
-<br>
-
-
-
-
-
-@if($produto->imagens->count())
 
 
 <div style="
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-gap:20px;
+display:flex;
+gap:15px;
+margin-top:20px;
+flex-wrap:wrap;
 ">
 
 
-@foreach($produto->imagens as $imagem)
+
+@forelse($produto->imagens as $imagem)
 
 
-<div
-style="
-border:1px solid #ddd;
-padding:10px;
-border-radius:8px;
-">
+
+<div>
 
 
 <img
-src="{{ $imagem->url }}"
+
+src="{{ asset('storage/'.$imagem->imagem) }}"
+
 style="
-width:100%;
-height:180px;
+width:150px;
+height:150px;
 object-fit:cover;
-border-radius:6px;
-">
+border-radius:10px;
+"
 
+>
 
-
-<br><br>
 
 
 
 
 <form
+
 method="POST"
-action="{{ route('admin.produtos.imagem.destroy',$imagem) }}"
+
+action="{{ route('admin.produtos.imagem.destroy',$imagem->id) }}"
+
 >
 
 
@@ -481,18 +599,20 @@ action="{{ route('admin.produtos.imagem.destroy',$imagem) }}"
 
 
 <button
-onclick="return confirm('Excluir imagem?')"
+
 style="
-width:100%;
 background:#dc2626;
 color:white;
 border:none;
-padding:10px;
+padding:8px;
 border-radius:6px;
 cursor:pointer;
-">
+margin-top:5px;
+"
 
-Excluir
+>
+
+🗑 Excluir
 
 </button>
 
@@ -505,35 +625,24 @@ Excluir
 
 
 
-@endforeach
+@empty
 
 
-</div>
-
-
-
-@else
-
-
-<div
-style="
-padding:30px;
-text-align:center;
-border:2px dashed #ddd;
-border-radius:8px;
-">
-
+<p>
 Nenhuma imagem cadastrada.
+</p>
+
+
+@endforelse
+
+
 
 </div>
 
 
-@endif
-
 
 
 </div>
-
 
 
 @endsection

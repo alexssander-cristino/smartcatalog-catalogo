@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProdutoImagem extends Model
 {
+
     use HasFactory;
+
 
 
     protected $table = 'produto_imagens';
@@ -16,38 +18,25 @@ class ProdutoImagem extends Model
 
 
     protected $fillable = [
+
         'produto_id',
+
         'imagem',
+
     ];
 
 
-
-    protected $appends = [
-        'url'
-    ];
 
 
 
     public function produto()
     {
+
         return $this->belongsTo(
-            Produto::class,
-            'produto_id'
+            Produto::class
         );
+
     }
 
-
-
-    public function getUrlAttribute()
-    {
-        if (!$this->imagem) {
-            return null;
-        }
-
-
-        return asset(
-            'storage/' . $this->imagem
-        );
-    }
 
 }

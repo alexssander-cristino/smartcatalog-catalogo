@@ -1,6 +1,8 @@
 <?php
 
+
 namespace App\Http\Controllers\Admin;
+
 
 use App\Http\Controllers\Controller;
 use App\Models\Categoria;
@@ -9,12 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 
+
 class ProdutoController extends Controller
 {
 
 
     public function index()
     {
+
 
         $produtos = Produto::with([
             'categoria',
@@ -30,7 +34,10 @@ class ProdutoController extends Controller
             compact('produtos')
         );
 
+
     }
+
+
 
 
 
@@ -38,6 +45,7 @@ class ProdutoController extends Controller
 
     public function create()
     {
+
 
         $categorias = Categoria::where('ativo', true)
             ->orderBy('nome')
@@ -50,7 +58,12 @@ class ProdutoController extends Controller
             compact('categorias')
         );
 
+
     }
+
+
+
+
 
 
 
@@ -59,25 +72,34 @@ class ProdutoController extends Controller
     public function store(Request $request)
     {
 
+
         $request->validate([
+
 
             'categoria_id' => 'required|exists:categorias,id',
 
-            'nome' => 'required|max:255',
+            'sku' => 'nullable|max:100',
 
-            'codigo' => 'nullable|max:100',
+            'nome' => 'required|max:255',
 
             'marca' => 'nullable|max:255',
 
-            'descricao' => 'nullable',
+            'descricao' => 'nullable|string',
 
             'preco' => 'required|numeric|min:0',
 
+            'preco_promocional' => 'nullable|numeric|min:0',
+
             'estoque' => 'required|integer|min:0',
+
+            'unidade' => 'nullable|max:20',
 
             'imagem' => 'nullable|image|max:2048',
 
+
         ]);
+
+
 
 
 
@@ -85,25 +107,46 @@ class ProdutoController extends Controller
 
         $produto = Produto::create([
 
+
+
             'categoria_id' => $request->categoria_id,
+
+
+            'sku' => $request->sku,
+
 
             'nome' => $request->nome,
 
-            'codigo' => $request->codigo,
 
             'marca' => $request->marca,
 
+
             'descricao' => $request->descricao,
+
 
             'preco' => $request->preco,
 
+
+            'preco_promocional' => $request->preco_promocional,
+
+
             'estoque' => $request->estoque,
+
+
+            'unidade' => $request->unidade,
+
 
             'ativo' => $request->boolean('ativo'),
 
+
             'destaque' => $request->boolean('destaque'),
 
+
+
         ]);
+
+
+
 
 
 
@@ -136,7 +179,11 @@ class ProdutoController extends Controller
 
             ]);
 
+
+
         }
+
+
 
 
 
@@ -152,7 +199,12 @@ class ProdutoController extends Controller
                 'Produto cadastrado com sucesso.'
             );
 
+
     }
+
+
+
+
 
 
 
@@ -184,7 +236,12 @@ class ProdutoController extends Controller
 
         );
 
+
     }
+
+
+
+
 
 
 
@@ -202,7 +259,6 @@ class ProdutoController extends Controller
             'imagens'
 
         ]);
-
 
 
 
@@ -232,7 +288,11 @@ class ProdutoController extends Controller
 
         );
 
+
     }
+
+
+
 
 
 
@@ -248,23 +308,32 @@ class ProdutoController extends Controller
 
         $request->validate([
 
+
             'categoria_id' => 'required|exists:categorias,id',
+
+            'sku' => 'nullable|max:100',
 
             'nome' => 'required|max:255',
 
-            'codigo' => 'nullable|max:100',
-
             'marca' => 'nullable|max:255',
 
-            'descricao' => 'nullable',
+            'descricao' => 'nullable|string',
 
             'preco' => 'required|numeric|min:0',
 
+            'preco_promocional' => 'nullable|numeric|min:0',
+
             'estoque' => 'required|integer|min:0',
+
+            'unidade' => 'nullable|max:20',
 
             'imagem' => 'nullable|image|max:2048',
 
+
         ]);
+
+
+
 
 
 
@@ -274,23 +343,39 @@ class ProdutoController extends Controller
         $produto->update([
 
 
+
             'categoria_id' => $request->categoria_id,
+
+
+            'sku' => $request->sku,
+
 
             'nome' => $request->nome,
 
-            'codigo' => $request->codigo,
 
             'marca' => $request->marca,
 
+
             'descricao' => $request->descricao,
+
 
             'preco' => $request->preco,
 
+
+            'preco_promocional' => $request->preco_promocional,
+
+
             'estoque' => $request->estoque,
+
+
+            'unidade' => $request->unidade,
+
 
             'ativo' => $request->boolean('ativo'),
 
+
             'destaque' => $request->boolean('destaque'),
+
 
 
         ]);
@@ -301,9 +386,11 @@ class ProdutoController extends Controller
 
 
 
+
+
         /*
         |--------------------------------------------------------------------------
-        | Adicionar nova imagem no editar
+        | Adicionar nova imagem
         |--------------------------------------------------------------------------
         */
 
@@ -322,11 +409,16 @@ class ProdutoController extends Controller
 
 
 
+
             $produto->imagens()->create([
+
 
                 'imagem'=>$arquivo
 
+
             ]);
+
+
 
         }
 
@@ -336,16 +428,24 @@ class ProdutoController extends Controller
 
 
 
+
+
         return redirect()
 
+
             ->route('admin.produtos.index')
+
 
             ->with(
                 'success',
                 'Produto atualizado com sucesso.'
             );
 
+
     }
+
+
+
 
 
 
@@ -359,14 +459,9 @@ class ProdutoController extends Controller
     {
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | Apagar imagens do storage
-        |--------------------------------------------------------------------------
-        */
-
 
         foreach($produto->imagens as $imagem){
+
 
 
             if(
@@ -375,14 +470,19 @@ class ProdutoController extends Controller
             ){
 
 
+
                 Storage::disk('public')
                     ->delete($imagem->imagem);
+
 
 
             }
 
 
+
         }
+
+
 
 
 
@@ -395,16 +495,21 @@ class ProdutoController extends Controller
 
 
 
+
         return redirect()
 
+
             ->route('admin.produtos.index')
+
 
             ->with(
                 'success',
                 'Produto removido com sucesso.'
             );
 
+
     }
+
 
 
 }

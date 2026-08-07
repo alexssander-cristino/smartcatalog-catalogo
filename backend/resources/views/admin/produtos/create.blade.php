@@ -3,16 +3,17 @@
 @section('content')
 
 
-<div style="
-max-width:900px;
-margin:auto;
-">
+<div class="card">
 
 
 <h1 style="
+font-size:28px;
+font-weight:bold;
 margin-bottom:25px;
 ">
-Novo Produto
+
+📦 Novo Produto
+
 </h1>
 
 
@@ -28,17 +29,11 @@ border-radius:8px;
 margin-bottom:20px;
 ">
 
-<ul style="margin:0;padding-left:20px;">
-
 @foreach($errors->all() as $error)
 
-<li>
-{{ $error }}
-</li>
+<p>{{ $error }}</p>
 
 @endforeach
-
-</ul>
 
 </div>
 
@@ -49,18 +44,7 @@ margin-bottom:20px;
 
 
 
-<div style="
-background:white;
-padding:30px;
-border-radius:12px;
-box-shadow:0 4px 15px rgba(0,0,0,.08);
-">
-
-
-
-
-
-<form
+<form 
 method="POST"
 action="{{ route('admin.produtos.store') }}"
 enctype="multipart/form-data"
@@ -77,8 +61,6 @@ enctype="multipart/form-data"
 Categoria
 </label>
 
-<br>
-
 
 <select
 name="categoria_id"
@@ -89,6 +71,7 @@ padding:12px;
 border:1px solid #ddd;
 border-radius:8px;
 margin-top:8px;
+margin-bottom:15px;
 "
 >
 
@@ -101,10 +84,7 @@ Selecione uma categoria
 @foreach($categorias as $categoria)
 
 
-<option
-value="{{ $categoria->id }}"
-{{ old('categoria_id') == $categoria->id ? 'selected' : '' }}
->
+<option value="{{ $categoria->id }}">
 
 {{ $categoria->nome }}
 
@@ -121,7 +101,35 @@ value="{{ $categoria->id }}"
 
 
 
-<br><br>
+<label>
+Código SKU
+</label>
+
+
+<input
+
+type="text"
+
+name="sku"
+
+value="{{ old('sku') }}"
+
+placeholder="Ex: PROD-001"
+
+style="
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-top:8px;
+margin-bottom:15px;
+"
+
+>
+
+
+
+
 
 
 
@@ -130,260 +138,298 @@ value="{{ $categoria->id }}"
 Nome do produto
 </label>
 
-<br>
-
 
 <input
+
 type="text"
+
 name="nome"
+
 value="{{ old('nome') }}"
+
 required
+
 style="
 width:100%;
 padding:12px;
 border:1px solid #ddd;
 border-radius:8px;
 margin-top:8px;
+margin-bottom:15px;
 "
+
 >
 
 
 
 
 
-
-<br><br>
-
-
-
-
-
-<div style="
-display:flex;
-gap:20px;
-">
-
-
-<div style="flex:1">
-
-
-<label>
-Código
-</label>
-
-<br>
-
-
-<input
-type="text"
-name="codigo"
-value="{{ old('codigo') }}"
-style="
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:8px;
-margin-top:8px;
-"
->
-
-
-</div>
-
-
-
-
-
-<div style="flex:1">
 
 
 <label>
 Marca
 </label>
 
-<br>
-
 
 <input
+
 type="text"
+
 name="marca"
+
 value="{{ old('marca') }}"
+
 style="
 width:100%;
 padding:12px;
 border:1px solid #ddd;
 border-radius:8px;
 margin-top:8px;
+margin-bottom:15px;
 "
+
 >
 
 
-</div>
-
-
-</div>
 
 
 
 
-
-
-<br><br>
-
-
-
-
-
-
-<div style="
-display:flex;
-gap:20px;
-">
-
-
-<div style="flex:1">
 
 
 <label>
-Preço
+Descrição
 </label>
 
-<br>
 
+<textarea
 
-<input
-type="number"
-name="preco"
-step="0.01"
-value="{{ old('preco') }}"
-required
+name="descricao"
+
+rows="5"
+
+placeholder="Descrição completa do produto"
+
 style="
 width:100%;
 padding:12px;
 border:1px solid #ddd;
 border-radius:8px;
 margin-top:8px;
+margin-bottom:15px;
 "
+
+>{{ old('descricao') }}</textarea>
+
+
+
+
+
+
+
+
+<label>
+Preço normal
+</label>
+
+
+<input
+
+type="number"
+
+name="preco"
+
+step="0.01"
+
+value="{{ old('preco') }}"
+
+required
+
+style="
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-top:8px;
+margin-bottom:15px;
+"
+
 >
 
 
-</div>
 
 
 
 
 
-<div style="flex:1">
+<label>
+Preço promocional
+</label>
+
+
+<input
+
+type="number"
+
+name="preco_promocional"
+
+step="0.01"
+
+value="{{ old('preco_promocional') }}"
+
+placeholder="Opcional"
+
+style="
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-top:8px;
+margin-bottom:15px;
+"
+
+>
+
+
+
+
+
 
 
 <label>
 Estoque
 </label>
 
-<br>
-
 
 <input
+
 type="number"
+
 name="estoque"
+
 value="{{ old('estoque',0) }}"
+
 required
+
 style="
 width:100%;
 padding:12px;
 border:1px solid #ddd;
 border-radius:8px;
 margin-top:8px;
+margin-bottom:15px;
 "
+
 >
 
 
-</div>
 
-
-
-</div>
-
-
-
-
-
-
-
-<br><br>
 
 
 
 
 <label>
-Imagem do produto
+Unidade
 </label>
+
+
+<input
+
+type="text"
+
+name="unidade"
+
+value="{{ old('unidade','UN') }}"
+
+placeholder="UN, KG, CX"
+
+style="
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:8px;
+margin-top:8px;
+margin-bottom:15px;
+"
+
+>
+
+
+
+
+
+
+
+
+<label>
+Imagem principal
+</label>
+
+
+<input
+
+type="file"
+
+name="imagem"
+
+accept="image/*"
+
+style="
+margin-top:10px;
+margin-bottom:20px;
+"
+
+>
+
+
+
+
+
+
+
+<div style="margin-bottom:20px;">
+
+
+<label>
+
+<input
+
+type="checkbox"
+
+name="ativo"
+
+value="1"
+
+checked
+
+>
+
+Produto ativo
+
+
+</label>
+
+
 
 <br>
 
 
-<input
-type="file"
-name="imagem"
-accept="image/*"
-style="
-margin-top:10px;
-padding:8px;
-"
->
-
-
-
-
-
-
-<br><br>
-
-
-
-
-<div style="
-background:#f9fafb;
-padding:15px;
-border-radius:8px;
-">
-
-
-<label style="display:block;margin-bottom:10px;">
-
-
-<input
-type="checkbox"
-name="ativo"
-value="1"
-checked
->
-
-
- Produto ativo
-
-
-</label>
-
-
-
-
-
 <label>
 
-
 <input
+
 type="checkbox"
+
 name="destaque"
+
 value="1"
+
 >
 
-
- Produto em destaque
+Produto em destaque
 
 
 </label>
-
 
 
 </div>
@@ -394,20 +440,10 @@ value="1"
 
 
 
-<br><br>
-
-
-
-
-
-<div style="
-display:flex;
-gap:15px;
-">
-
-
 <button
+
 type="submit"
+
 style="
 background:#2563eb;
 color:white;
@@ -416,10 +452,13 @@ padding:13px 30px;
 border-radius:8px;
 cursor:pointer;
 font-size:15px;
+font-weight:bold;
 "
+
 >
 
 💾 Salvar Produto
+
 
 </button>
 
@@ -428,26 +467,24 @@ font-size:15px;
 
 
 <a
+
 href="{{ route('admin.produtos.index') }}"
+
 style="
 background:#6b7280;
 color:white;
 padding:13px 30px;
 border-radius:8px;
 text-decoration:none;
-font-size:15px;
+margin-left:10px;
 "
+
 >
 
 ← Cancelar
 
+
 </a>
-
-
-
-</div>
-
-
 
 
 
@@ -457,8 +494,6 @@ font-size:15px;
 
 </div>
 
-
-</div>
 
 
 @endsection

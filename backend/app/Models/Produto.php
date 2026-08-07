@@ -1,45 +1,177 @@
 <?php
 
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+
 
 class Produto extends Model
 {
+
+
     use HasFactory;
 
+
+
     protected $fillable = [
-        'categoria_id',
+
+
+        'sku',
+
         'nome',
-        'codigo',
+
         'marca',
+
         'descricao',
+
+        'categoria_id',
+
         'preco',
+
+        'preco_promocional',
+
         'estoque',
+
+        'unidade',
+
         'ativo',
+
         'destaque',
+
+
     ];
 
-    protected $casts = [
-        'preco' => 'decimal:2',
-        'ativo' => 'boolean',
-        'destaque' => 'boolean',
-    ];
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Categoria do produto
+    |--------------------------------------------------------------------------
+    */
+
 
     public function categoria()
     {
+
+
         return $this->belongsTo(
-            Categoria::class,
-            'categoria_id'
+            Categoria::class
         );
+
+
     }
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Imagens do produto
+    |--------------------------------------------------------------------------
+    */
+
 
     public function imagens()
     {
+
+
         return $this->hasMany(
-            ProdutoImagem::class,
-            'produto_id'
+            ProdutoImagem::class
         );
+
+
     }
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Retorna preço formatado
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function getPrecoFormatadoAttribute()
+    {
+
+
+        return number_format(
+            $this->preco,
+            2,
+            ',',
+            '.'
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Retorna preço promocional ou normal
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function getPrecoAtualAttribute()
+    {
+
+
+        if(
+            $this->preco_promocional &&
+            $this->preco_promocional > 0
+        ){
+
+            return $this->preco_promocional;
+
+        }
+
+
+
+        return $this->preco;
+
+
+    }
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Verifica se está em promoção
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function getEmPromocaoAttribute()
+    {
+
+
+        return $this->preco_promocional 
+            && $this->preco_promocional < $this->preco;
+
+
+    }
+
+
 }
