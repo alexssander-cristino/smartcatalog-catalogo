@@ -2,647 +2,623 @@
 
 @section('content')
 
+<style>
+    .produto-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
 
-<div class="card">
+    .produto-header {
+        margin-bottom: 25px;
+    }
+
+    .produto-header h1 {
+        color: #111827;
+        font-size: 28px;
+        margin-bottom: 5px;
+    }
+
+    .produto-header p {
+        color: #64748b;
+    }
+
+    .produto-card {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,.06);
+        margin-bottom: 25px;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 7px;
+    }
+
+    input,
+    select,
+    textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 9px;
+        font-size: 15px;
+        font-family: inherit;
+    }
+
+    textarea {
+        min-height: 130px;
+        resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+    }
+
+    .promocao {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        padding: 18px;
+        border-radius: 12px;
+    }
+
+    .promocao label {
+        color: #166534;
+    }
+
+    .ajuda {
+        display: block;
+        color: #64748b;
+        font-size: 13px;
+        margin-top: 6px;
+    }
+
+    .checkbox-area {
+        display: flex;
+        gap: 25px;
+        margin: 10px 0 25px;
+    }
+
+    .checkbox {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .checkbox input {
+        width: auto;
+    }
+
+    .btn {
+        border: none;
+        padding: 13px 25px;
+        border-radius: 9px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-primary {
+        background: #2563eb;
+        color: white;
+    }
+
+    .btn-secondary {
+        background: #64748b;
+        color: white;
+    }
+
+    .btn-danger {
+        background: #dc2626;
+        color: white;
+    }
+
+    .botoes {
+        display: flex;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .erro {
+        color: #dc2626;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    .imagem-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 15px;
+    }
+
+    .imagem-item {
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 10px;
+        background: #f8fafc;
+    }
+
+    .imagem-item img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 8px;
+        display: block;
+    }
+
+    .imagem-item form {
+        margin-top: 10px;
+    }
+
+    @media(max-width:700px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .checkbox-area {
+            flex-direction: column;
+            gap: 12px;
+        }
+    }
+</style>
+
+<div class="produto-container">
 
 
-<h1>
-    ✏️ Editar Produto
-</h1>
+<div class="produto-header">
 
+    <h1>
+        ✏️ Editar Produto
+    </h1>
+
+    <p>
+        Atualize as informações do produto.
+    </p>
+
+</div>
 
 
 @if(session('success'))
 
-<div style="
-background:#dcfce7;
-color:#166534;
-padding:12px;
-border-radius:8px;
-margin:15px 0;
-">
-
-{{ session('success') }}
-
-</div>
+    <div
+        style="
+            background:#dcfce7;
+            color:#166534;
+            padding:15px;
+            border-radius:10px;
+            margin-bottom:20px;
+        "
+    >
+        {{ session('success') }}
+    </div>
 
 @endif
-
-
-
-
 
 
 @if($errors->any())
 
-<div style="
-background:#fee2e2;
-color:#991b1b;
-padding:12px;
-border-radius:8px;
-margin:15px 0;
-">
+    <div
+        style="
+            background:#fee2e2;
+            color:#991b1b;
+            padding:15px;
+            border-radius:10px;
+            margin-bottom:20px;
+        "
+    >
 
-@foreach($errors->all() as $error)
+        <strong>
+            Corrija os seguintes erros:
+        </strong>
 
-<p>{{ $error }}</p>
+        <ul style="padding-left:20px;margin-top:8px;">
 
-@endforeach
+            @foreach($errors->all() as $error)
 
-</div>
+                <li>
+                    {{ $error }}
+                </li>
+
+            @endforeach
+
+        </ul>
+
+    </div>
 
 @endif
 
 
+{{-- DADOS DO PRODUTO --}}
 
+<div class="produto-card">
 
+    <form
+        method="POST"
+        action="{{ route('admin.produtos.update', $produto) }}"
+        enctype="multipart/form-data"
+    >
 
+        @csrf
 
+        @method('PUT')
 
 
-<form method="POST"
+        <div class="form-group">
 
-action="{{ route('admin.produtos.update',$produto->id) }}"
+            <label for="categoria_id">
+                Categoria
+            </label>
 
-enctype="multipart/form-data">
+            <select
+                id="categoria_id"
+                name="categoria_id"
+                required
+            >
 
+                @foreach($categorias as $categoria)
 
-@csrf
+                    <option
+                        value="{{ $categoria->id }}"
+                        {{ old('categoria_id', $produto->categoria_id) == $categoria->id ? 'selected' : '' }}
+                    >
+                        {{ $categoria->nome }}
+                    </option>
 
-@method('PUT')
+                @endforeach
 
+            </select>
 
+        </div>
 
 
+        <div class="form-row">
 
-<label>
-Categoria
-</label>
+            <div class="form-group">
 
+                <label for="nome">
+                    Nome
+                </label>
 
-<select
-name="categoria_id"
-required
-style="
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:8px;
-margin-top:8px;
-margin-bottom:15px;
-"
->
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    value="{{ old('nome', $produto->nome) }}"
+                    required
+                >
 
+            </div>
 
-@foreach($categorias as $categoria)
 
+            <div class="form-group">
 
-<option
+                <label for="sku">
+                    SKU
+                </label>
 
-value="{{ $categoria->id }}"
+                <input
+                    type="text"
+                    id="sku"
+                    name="sku"
+                    value="{{ old('sku', $produto->sku) }}"
+                >
 
-{{ $produto->categoria_id == $categoria->id ? 'selected' : '' }}
+            </div>
 
->
+        </div>
 
-{{ $categoria->nome }}
 
-</option>
+        <div class="form-row">
 
+            <div class="form-group">
 
-@endforeach
+                <label for="marca">
+                    Marca
+                </label>
 
+                <input
+                    type="text"
+                    id="marca"
+                    name="marca"
+                    value="{{ old('marca', $produto->marca) }}"
+                >
 
-</select>
+            </div>
 
 
+            <div class="form-group">
 
+                <label for="unidade">
+                    Unidade
+                </label>
 
+                <input
+                    type="text"
+                    id="unidade"
+                    name="unidade"
+                    value="{{ old('unidade', $produto->unidade) }}"
+                >
 
+            </div>
 
+        </div>
 
-<label>
-Código SKU
-</label>
 
+        {{-- PREÇOS --}}
 
-<input
+        <div class="form-row">
 
-type="text"
+            <div class="form-group">
 
-name="sku"
+                <label for="preco">
+                    💰 Preço normal
+                </label>
 
-value="{{ old('sku',$produto->sku) }}"
+                <input
+                    type="number"
+                    id="preco"
+                    name="preco"
+                    step="0.01"
+                    min="0"
+                    value="{{ old('preco', $produto->preco) }}"
+                    required
+                >
 
-style="
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:8px;
-margin-top:8px;
-margin-bottom:15px;
-"
+                @error('preco')
 
->
+                    <div class="erro">
+                        {{ $message }}
+                    </div>
 
+                @enderror
 
+            </div>
 
 
+            <div class="form-group promocao">
 
+                <label for="preco_promocional">
+                    🏷️ Preço promocional
+                </label>
 
+                <input
+                    type="number"
+                    id="preco_promocional"
+                    name="preco_promocional"
+                    step="0.01"
+                    min="0"
+                    value="{{ old('preco_promocional', $produto->preco_promocional) }}"
+                    placeholder="Sem promoção"
+                >
 
-<label>
-Nome
-</label>
+                <span class="ajuda">
+                    Deixe vazio para remover a promoção.
+                </span>
 
+                @error('preco_promocional')
 
-<input
+                    <div class="erro">
+                        {{ $message }}
+                    </div>
 
-type="text"
+                @enderror
 
-name="nome"
+            </div>
 
-value="{{ old('nome',$produto->nome) }}"
+        </div>
 
-required
 
-style="
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:8px;
-margin-top:8px;
-margin-bottom:15px;
-"
+        <div class="form-row">
 
->
+            <div class="form-group">
 
+                <label for="estoque">
+                    📦 Estoque
+                </label>
 
+                <input
+                    type="number"
+                    id="estoque"
+                    name="estoque"
+                    min="0"
+                    value="{{ old('estoque', $produto->estoque) }}"
+                    required
+                >
 
+            </div>
 
 
+            <div class="form-group">
 
+                <label>
+                    🖼️ Nova imagem
+                </label>
 
-<label>
-Marca
-</label>
+                <input
+                    type="file"
+                    name="imagem"
+                    accept="image/*"
+                >
 
+            </div>
 
-<input
+        </div>
 
-type="text"
 
-name="marca"
+        <div class="form-group">
 
-value="{{ old('marca',$produto->marca) }}"
+            <label for="descricao">
+                📝 Descrição
+            </label>
 
-style="
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:8px;
-margin-top:8px;
-margin-bottom:15px;
-"
+            <textarea
+                id="descricao"
+                name="descricao"
+            >{{ old('descricao', $produto->descricao) }}</textarea>
 
->
+        </div>
 
 
+        <div class="checkbox-area">
 
+            <label class="checkbox">
 
+                <input
+                    type="checkbox"
+                    name="ativo"
+                    value="1"
+                    {{ old('ativo', $produto->ativo) ? 'checked' : '' }}
+                >
 
+                Produto ativo
 
+            </label>
 
-<label>
-Descrição
-</label>
 
+            <label class="checkbox">
 
-<textarea
+                <input
+                    type="checkbox"
+                    name="destaque"
+                    value="1"
+                    {{ old('destaque', $produto->destaque) ? 'checked' : '' }}
+                >
 
-name="descricao"
+                ⭐ Produto em destaque
 
-rows="5"
+            </label>
 
-style="
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:8px;
-margin-top:8px;
-margin-bottom:15px;
-"
+        </div>
 
->{{ old('descricao',$produto->descricao) }}</textarea>
 
+        <div class="botoes">
 
+            <button
+                type="submit"
+                class="btn btn-primary"
+            >
+                💾 Atualizar Produto
+            </button>
 
 
+            <a
+                href="{{ route('admin.produtos.index') }}"
+                class="btn btn-secondary"
+            >
+                ← Cancelar
+            </a>
 
+        </div>
 
-
-
-<label>
-Preço normal
-</label>
-
-
-<input
-
-type="number"
-
-step="0.01"
-
-name="preco"
-
-value="{{ old('preco',$produto->preco) }}"
-
-required
-
-style="
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:8px;
-margin-top:8px;
-margin-bottom:15px;
-"
-
->
-
-
-
-
-
-
-
-<label>
-Preço promocional
-</label>
-
-
-<input
-
-type="number"
-
-step="0.01"
-
-name="preco_promocional"
-
-value="{{ old('preco_promocional',$produto->preco_promocional) }}"
-
-style="
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:8px;
-margin-top:8px;
-margin-bottom:15px;
-"
-
->
-
-
-
-
-
-
-
-<label>
-Estoque
-</label>
-
-
-<input
-
-type="number"
-
-name="estoque"
-
-value="{{ old('estoque',$produto->estoque) }}"
-
-required
-
-style="
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:8px;
-margin-top:8px;
-margin-bottom:15px;
-"
-
->
-
-
-
-
-
-
-
-<label>
-Unidade
-</label>
-
-
-<input
-
-type="text"
-
-name="unidade"
-
-value="{{ old('unidade',$produto->unidade) }}"
-
-style="
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:8px;
-margin-top:8px;
-margin-bottom:15px;
-"
-
->
-
-
-
-
-
-
-
-
-<label>
-
-<input
-
-type="checkbox"
-
-name="ativo"
-
-value="1"
-
-{{ $produto->ativo ? 'checked' : '' }}
-
->
-
-Produto ativo
-
-</label>
-
-
-
-
-<br>
-
-
-
-<label>
-
-<input
-
-type="checkbox"
-
-name="destaque"
-
-value="1"
-
-{{ $produto->destaque ? 'checked' : '' }}
-
->
-
-Produto em destaque
-
-</label>
-
-
-
-
-
-
-
-<br><br>
-
-<button
-
-type="submit"
-
-style="
-background:#2563eb;
-color:white;
-border:none;
-padding:12px 25px;
-border-radius:8px;
-font-weight:bold;
-cursor:pointer;
-"
-
->
-
-💾 Atualizar Produto
-
-</button>
-
-
-
-
-
-<a
-
-href="{{ route('admin.produtos.index') }}"
-
-style="
-background:#64748b;
-color:white;
-padding:12px 25px;
-border-radius:8px;
-text-decoration:none;
-font-weight:bold;
-margin-left:15px;
-display:inline-block;
-"
-
->
-
-Cancelar
-
-</a>
-
-
-
-</form>
-
-
-
-
-
-
-
-<hr style="margin:30px 0;">
-
-
-
-
-
-<h2>
-📷 Imagens do Produto
-</h2>
-
-
-
-
-
-<form
-
-method="POST"
-
-action="{{ route('admin.produtos.imagem.store',$produto->id) }}"
-
-enctype="multipart/form-data"
-
-style="margin-top:15px;"
-
->
-
-
-@csrf
-
-
-
-<input
-
-type="file"
-
-name="imagem"
-
-accept="image/*"
-
-required
-
->
-
-
-
-<button
-
-type="submit"
-
-style="
-background:#16a34a;
-color:white;
-border:none;
-padding:10px 20px;
-border-radius:8px;
-cursor:pointer;
-"
-
->
-
-Adicionar Imagem
-
-</button>
-
-
-</form>
-
-
-
-
-
-
-
-<div style="
-display:flex;
-gap:15px;
-margin-top:20px;
-flex-wrap:wrap;
-">
-
-
-
-@forelse($produto->imagens as $imagem)
-
-
-
-<div>
-
-
-<img
-
-src="{{ asset('storage/'.$imagem->imagem) }}"
-
-style="
-width:150px;
-height:150px;
-object-fit:cover;
-border-radius:10px;
-"
-
->
-
-
-
-
-
-<form
-
-method="POST"
-
-action="{{ route('admin.produtos.imagem.destroy',$imagem->id) }}"
-
->
-
-
-@csrf
-
-@method('DELETE')
-
-
-
-<button
-
-style="
-background:#dc2626;
-color:white;
-border:none;
-padding:8px;
-border-radius:6px;
-cursor:pointer;
-margin-top:5px;
-"
-
->
-
-🗑 Excluir
-
-</button>
-
-
-</form>
-
-
+    </form>
 
 </div>
 
 
+{{-- IMAGENS --}}
 
-@empty
+<div class="produto-card">
 
-
-<p>
-Nenhuma imagem cadastrada.
-</p>
-
-
-@endforelse
+    <h2 style="margin-bottom:20px;">
+        🖼️ Imagens do produto
+    </h2>
 
 
+    <form
+        method="POST"
+        action="{{ route('admin.produtos.imagem.store', $produto) }}"
+        enctype="multipart/form-data"
+        style="margin-bottom:25px;"
+    >
+
+        @csrf
+
+        <input
+            type="file"
+            name="imagem"
+            accept="image/*"
+            required
+        >
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+            style="margin-top:10px;"
+        >
+            ➕ Adicionar imagem
+        </button>
+
+    </form>
+
+
+    @if($produto->imagens->count())
+
+        <div class="imagem-grid">
+
+            @foreach($produto->imagens as $imagem)
+
+                <div class="imagem-item">
+
+                    <img
+                        src="{{ asset('storage/' . $imagem->imagem) }}"
+                        alt="{{ $produto->nome }}"
+                    >
+
+
+                    <form
+                        method="POST"
+                        action="{{ route('admin.produtos.imagem.destroy', $imagem) }}"
+                    >
+
+                        @csrf
+
+                        @method('DELETE')
+
+                        <button
+                            type="submit"
+                            class="btn btn-danger"
+                            style="width:100%;"
+                            onclick="return confirm('Deseja excluir esta imagem?')"
+                        >
+                            🗑️ Excluir
+                        </button>
+
+                    </form>
+
+                </div>
+
+            @endforeach
+
+        </div>
+
+    @else
+
+        <p style="color:#64748b;">
+            Nenhuma imagem cadastrada.
+        </p>
+
+    @endif
 
 </div>
 
 
-
-
 </div>
-
 
 @endsection
