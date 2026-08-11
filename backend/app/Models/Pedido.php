@@ -21,7 +21,7 @@ class Pedido extends Model
      */
     protected $fillable = [
         'user_id',
-        'cliente',
+        'cliente_id',
         'numero',
         'observacao',
         'valor_total',
@@ -37,12 +37,9 @@ class Pedido extends Model
         'emitido_em' => 'datetime',
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | Usuário que emitiu o pedido
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * Usuário que emitiu o pedido.
+     */
     public function usuario(): BelongsTo
     {
         return $this->belongsTo(
@@ -51,12 +48,20 @@ class Pedido extends Model
         );
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Itens do pedido
-    |--------------------------------------------------------------------------
-    */
+    /**
+     * Cliente do pedido.
+     */
+    public function cliente(): BelongsTo
+    {
+        return $this->belongsTo(
+            Cliente::class,
+            'cliente_id'
+        );
+    }
 
+    /**
+     * Itens do pedido.
+     */
     public function itens(): HasMany
     {
         return $this->hasMany(

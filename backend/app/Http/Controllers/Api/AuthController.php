@@ -5,76 +5,121 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AuthController extends Controller
 {
-
+    /**
+     * Login do aplicativo mobile.
+     */
     public function login(Request $request)
     {
-
-        $dados = $request->validate([
-
-            'email' => 'required|email',
-
-            'password' => 'required'
-
+        $request->validate([
+            'email' => [
+                'required',
+                'email',
+            ],
+            'password' => [
+                'required',
+                'string',
+            ],
         ]);
 
+        $user = User::where(
+            'email',
+            $request->email
+        )->first();
 
+        /*
+        |--------------------------------------------------------------------------
+        | Usuário não encontrado ou senha incorreta
+        |--------------------------------------------------------------------------
+        */
 
-        if(!Auth::attempt($dados)){
-
+        if (
+            !$user ||
+            !Hash::check(
+                $request->password,
+                $user->password
+            )
+        ) {
             return response()->json([
-
-                'message'=>'Usuário ou senha inválidos.'
-
-            ],401);
-
+                'success' => false,
+                'message' => 'E-mail ou senha incorretos.',
+            ], 401);
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Remove tokens antigos
+        |--------------------------------------------------------------------------
+        */
 
+        $user->tokens()->delete();
 
-        $user = Auth::user();
-
-
+        /*
+        |--------------------------------------------------------------------------
+        | Cria novo token
+        |--------------------------------------------------------------------------
+        */
 
         $token = $user->createToken(
-            'smartcatalog'
+            'mobile'
         )->plainTextToken;
 
-
+        /*
+        |--------------------------------------------------------------------------
+        | Retorno
+        |--------------------------------------------------------------------------
+        */
 
         return response()->json([
+            'success' => true,
+            'message' => 'Login realizado com sucesso.',
 
-            'user'=>$user,
+            'token' => $token,
 
-            'token'=>$token
-
-        ]);
-
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ],
+        ], 200);
     }
 
 
-
-
-
-
+    /**
+     * Logout do aplicativo mobile.
+     */
     public function logout(Request $request)
     {
-
-        $request
-        ->user()
-        ->currentAccessToken()
-        ->delete();
-
-
+        $request->user()
+            ->currentAccessToken()
+            ->delete();
 
         return response()->json([
-
-            'message'=>'Logout realizado.'
-
-        ]);
-
+            'success' => true,
+            'message' => 'Logout realizado com sucesso.',
+        ], 200);
     }
 
+
+    /**
+     * Retorna o usuário autenticado.
+     */
+    public function user(Request $request)
+    {
+        $user = $request->user();
+
+        return response()->json([
+            'success' => true,
+
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ],
+        ], 200);
+    }
 }

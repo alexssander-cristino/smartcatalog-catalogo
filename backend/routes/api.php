@@ -11,21 +11,43 @@ use App\Http\Controllers\Api\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
-| Rotas públicas
+| API Routes
 |--------------------------------------------------------------------------
+|
+| Todas as rotas deste arquivo recebem automaticamente o prefixo /api.
+|
+*/
+
+
+/*
+|--------------------------------------------------------------------------
+| ROTAS PÚBLICAS
+|--------------------------------------------------------------------------
+*/
+
+
+/*
+|--------------------------------------------------------------------------
+| Login
+|--------------------------------------------------------------------------
+|
+| POST /api/login
+|
 */
 
 Route::post('/login', [
     AuthController::class,
     'login'
-]);
-
+])->name('api.login');
 
 
 /*
 |--------------------------------------------------------------------------
-| Rotas protegidas
+| ROTAS PROTEGIDAS
 |--------------------------------------------------------------------------
+|
+| Todas as rotas abaixo precisam de um token Sanctum válido.
+|
 */
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -33,34 +55,61 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Autenticação
+    | USUÁRIO AUTENTICADO
     |--------------------------------------------------------------------------
+    |
+    | GET /api/user
+    |
+    */
+
+    Route::get('/user', [
+        AuthController::class,
+        'user'
+    ])->name('api.user');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | LOGOUT
+    |--------------------------------------------------------------------------
+    |
+    | POST /api/logout
+    |
     */
 
     Route::post('/logout', [
         AuthController::class,
         'logout'
-    ]);
-
+    ])->name('api.logout');
 
 
     /*
     |--------------------------------------------------------------------------
-    | Dashboard
+    | DASHBOARD
     |--------------------------------------------------------------------------
+    |
+    | GET /api/dashboard
+    |
     */
 
     Route::get('/dashboard', [
         DashboardController::class,
         'index'
-    ]);
-
+    ])->name('api.dashboard');
 
 
     /*
     |--------------------------------------------------------------------------
-    | Categorias
+    | CATEGORIAS
     |--------------------------------------------------------------------------
+    |
+    | GET    /api/categorias
+    | POST   /api/categorias
+    | GET    /api/categorias/{categoria}
+    | PUT    /api/categorias/{categoria}
+    | PATCH  /api/categorias/{categoria}
+    | DELETE /api/categorias/{categoria}
+    |
     */
 
     Route::apiResource(
@@ -69,11 +118,18 @@ Route::middleware('auth:sanctum')->group(function () {
     );
 
 
-
     /*
     |--------------------------------------------------------------------------
-    | Produtos
+    | PRODUTOS
     |--------------------------------------------------------------------------
+    |
+    | GET    /api/produtos
+    | POST   /api/produtos
+    | GET    /api/produtos/{produto}
+    | PUT    /api/produtos/{produto}
+    | PATCH  /api/produtos/{produto}
+    | DELETE /api/produtos/{produto}
+    |
     */
 
     Route::apiResource(
@@ -82,11 +138,13 @@ Route::middleware('auth:sanctum')->group(function () {
     );
 
 
-
     /*
     |--------------------------------------------------------------------------
-    | Imagens dos produtos
+    | IMAGENS DOS PRODUTOS
     |--------------------------------------------------------------------------
+    |
+    | POST /api/produtos/{produto}/imagem
+    |
     */
 
     Route::post(
@@ -95,8 +153,17 @@ Route::middleware('auth:sanctum')->group(function () {
             ProdutoImagemController::class,
             'store'
         ]
-    );
+    )->name('api.produtos.imagem.store');
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | EXCLUIR IMAGEM
+    |--------------------------------------------------------------------------
+    |
+    | DELETE /api/imagem/{imagem}
+    |
+    */
 
     Route::delete(
         '/imagem/{imagem}',
@@ -104,7 +171,8 @@ Route::middleware('auth:sanctum')->group(function () {
             ProdutoImagemController::class,
             'destroy'
         ]
-    );
+    )->name('api.produtos.imagem.destroy');
 
 
 });
+

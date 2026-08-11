@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProdutoController;
 use App\Http\Controllers\Admin\ProdutoImagemController;
 use App\Http\Controllers\Admin\EstoqueController;
 use App\Http\Controllers\Admin\PedidoController;
+use App\Http\Controllers\Admin\RelatorioController;
 
 use App\Http\Controllers\CatalogoController;
 
@@ -16,12 +17,18 @@ use App\Http\Controllers\CatalogoController;
 |--------------------------------------------------------------------------
 | Página inicial
 |--------------------------------------------------------------------------
+|
+| Ao acessar a raiz do sistema:
+|
+| /
+|
+| o usuário será enviado para o login.
+|
 */
 
 Route::get('/', function () {
 
-    return redirect()
-        ->route('catalogo.index');
+    return redirect()->route('login');
 
 });
 
@@ -39,7 +46,13 @@ require __DIR__ . '/auth.php';
 |--------------------------------------------------------------------------
 | Catálogo Público
 |--------------------------------------------------------------------------
+|
+| O catálogo continua disponível através de:
+|
+| /catalogo
+|
 */
+
 
 Route::get('/catalogo', [
     CatalogoController::class,
@@ -59,6 +72,9 @@ Route::get('/produto/{produto}', [
 |--------------------------------------------------------------------------
 | Painel Administrativo
 |--------------------------------------------------------------------------
+|
+| Todas as rotas abaixo exigem login.
+|
 */
 
 Route::middleware('auth')
@@ -210,4 +226,21 @@ Route::middleware('auth')
         );
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | Relatórios
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get(
+            '/relatorios',
+            [
+                RelatorioController::class,
+                'index'
+            ]
+        )
+            ->name('relatorios.index');
+
+
     });
+

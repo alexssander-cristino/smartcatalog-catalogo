@@ -9,11 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-
 class AuthenticatedSessionController extends Controller
 {
-
-
     /**
      * Exibe a tela de login.
      */
@@ -22,58 +19,30 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login');
     }
 
-
-
-
-
     /**
      * Processa o login.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-
         $request->authenticate();
-
 
         $request->session()->regenerate();
 
-
-
-        return redirect()->intended(
-            route(
-                'admin.dashboard',
-                absolute: false
-            )
-        );
-
+        return redirect()->route('admin.dashboard');
     }
 
-
-
-
-
     /**
-     * Encerra a sessão.
+     * Encerra a sessão do usuário.
      */
     public function destroy(Request $request): RedirectResponse
     {
-
-
         Auth::guard('web')->logout();
-
-
 
         $request->session()->invalidate();
 
-
-
         $request->session()->regenerateToken();
 
-
-
-        return redirect('/login');
-
+        return redirect()->route('login');
     }
-
-
 }
+
