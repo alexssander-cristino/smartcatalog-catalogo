@@ -174,4 +174,13 @@ class Produto extends Model
     }
 
 
+    public function movimentacoesEstoque()
+    {
+        return $this->hasMany(
+            MovimentacaoEstoque::class,
+            'produto_id'
+        )->latest();
+    }
+
+
 }

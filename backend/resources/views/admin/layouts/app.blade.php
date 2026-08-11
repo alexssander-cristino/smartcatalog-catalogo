@@ -1,763 +1,658 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
 
+
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>
-SmartCatalog
+    SmartCatalog
 </title>
-
 
 <style>
 
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Arial, sans-serif;
+    }
 
-*{
+    body {
+        display: flex;
+        min-height: 100vh;
+        background: #f1f5f9;
+    }
 
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI', Arial, sans-serif;
 
-}
+    /* ==========================
+       SIDEBAR
+    ========================== */
 
+    .sidebar {
 
+        width: 270px;
 
-body{
+        min-height: 100vh;
 
-    display:flex;
-    min-height:100vh;
-    background:#f1f5f9;
+        background:
+            linear-gradient(
+                180deg,
+                #111827,
+                #1e293b
+            );
 
-}
+        color: white;
 
+        padding: 25px 20px;
 
+        position: fixed;
 
+        left: 0;
+        top: 0;
 
+        display: flex;
+        flex-direction: column;
 
-/* ==========================
-   SIDEBAR
-========================== */
+    }
 
 
-.sidebar{
+    /* ==========================
+       LOGO
+    ========================== */
 
+    .logo {
 
-    width:270px;
+        display: flex;
 
+        align-items: center;
 
-    min-height:100vh;
+        gap: 12px;
 
+        margin-bottom: 30px;
 
-    background:
-    linear-gradient(
-        180deg,
-        #111827,
-        #1e293b
-    );
+    }
 
+    .logo-icon {
 
-    color:white;
+        width: 45px;
 
+        height: 45px;
 
-    padding:25px 20px;
+        background: #2563eb;
 
+        border-radius: 12px;
 
-    position:fixed;
+        display: flex;
 
+        align-items: center;
 
-}
+        justify-content: center;
 
+        font-size: 22px;
 
+    }
 
+    .logo h2 {
 
+        font-size: 22px;
 
-.logo{
+        font-weight: 700;
 
+    }
 
-    display:flex;
 
+    /* ==========================
+       PERFIL
+    ========================== */
 
-    align-items:center;
+    .usuario {
 
+        background: rgba(255,255,255,.06);
 
-    gap:12px;
+        border: 1px solid rgba(255,255,255,.08);
 
+        border-radius: 14px;
 
-    margin-bottom:40px;
+        padding: 14px;
 
+        margin-bottom: 30px;
 
-}
+    }
 
+    .usuario-link {
 
+        display: flex;
 
+        align-items: center;
 
-.logo-icon{
+        gap: 12px;
 
+        color: white;
 
-    width:50px;
+        text-decoration: none;
 
+    }
 
-    height:50px;
+    .usuario-foto {
 
+        width: 52px;
 
-    background:#2563eb;
+        height: 52px;
 
+        border-radius: 50%;
 
-    border-radius:50%;
+        object-fit: cover;
 
+        border: 3px solid #2563eb;
 
-    display:flex;
+        background: #334155;
 
+        display: flex;
 
-    align-items:center;
+        align-items: center;
 
+        justify-content: center;
 
-    justify-content:center;
+        font-size: 20px;
 
+        font-weight: bold;
 
-    color:white;
+        flex-shrink: 0;
 
+    }
 
-    font-size:22px;
+    .usuario-info {
 
+        min-width: 0;
 
-    font-weight:bold;
+    }
 
+    .usuario-nome {
 
-}
+        font-size: 15px;
 
+        font-weight: 600;
 
+        white-space: nowrap;
 
+        overflow: hidden;
 
+        text-overflow: ellipsis;
 
-.logo h2{
+    }
 
+    .usuario-perfil {
 
-    font-size:22px;
+        color: #94a3b8;
 
+        font-size: 12px;
 
-    font-weight:700;
+        margin-top: 3px;
 
+    }
 
-}
 
+    /* ==========================
+       MENU
+    ========================== */
 
+    .menu-title {
 
+        color: #94a3b8;
 
-.logo p{
+        font-size: 12px;
 
+        text-transform: uppercase;
 
-    font-size:13px;
+        margin-bottom: 12px;
 
+        letter-spacing: .5px;
 
-    color:#94a3b8;
+    }
 
+    .sidebar a {
 
-    margin-top:4px;
+        display: flex;
 
+        align-items: center;
 
-}
+        gap: 12px;
 
+        color: #e5e7eb;
 
+        text-decoration: none;
 
+        padding: 13px 15px;
 
+        border-radius: 10px;
 
+        margin-bottom: 8px;
 
+        transition: .3s;
 
-.menu-title{
+    }
 
+    .sidebar a:hover {
 
-    color:#94a3b8;
+        background: #2563eb;
 
+        color: white;
 
-    font-size:12px;
+        transform: translateX(5px);
 
+    }
 
-    text-transform:uppercase;
+    .sidebar a .icone {
 
+        width: 25px;
 
-    margin-bottom:12px;
+        text-align: center;
 
+        font-size: 18px;
 
-}
+    }
 
 
+    /* ==========================
+       ESPAÇO DO MENU
+    ========================== */
 
+    .menu {
 
+        flex: 1;
 
+    }
 
 
-.sidebar a{
+    /* ==========================
+       LOGOUT
+    ========================== */
 
+    .logout {
 
-    display:flex;
+        margin-top: 20px;
 
+    }
 
-    align-items:center;
+    .logout form {
 
+        width: 100%;
 
-    gap:12px;
+    }
 
+    .logout button {
 
-    color:#e5e7eb;
+        width: 100%;
 
+        display: flex;
 
-    text-decoration:none;
+        align-items: center;
 
+        justify-content: center;
 
-    padding:13px 15px;
+        gap: 10px;
 
+        background: #dc2626;
 
-    border-radius:10px;
+        color: white;
 
+        border: none;
 
-    margin-bottom:8px;
+        border-radius: 10px;
 
+        padding: 13px;
 
-    transition:.3s;
+        font-size: 15px;
 
+        cursor: pointer;
 
-}
+        transition: .3s;
 
+    }
 
+    .logout button:hover {
 
+        background: #b91c1c;
 
+        transform: translateY(-2px);
 
+    }
 
-.sidebar a:hover{
 
+    /* ==========================
+       CONTEÚDO
+    ========================== */
 
-    background:#2563eb;
+    .content {
 
+        margin-left: 270px;
 
-    color:white;
+        width: calc(100% - 270px);
 
+        padding: 35px;
 
-    transform:translateX(5px);
+        min-height: 100vh;
 
+    }
 
-}
 
+    .header {
 
+        background: white;
 
+        padding: 25px;
 
+        border-radius: 16px;
 
+        margin-bottom: 25px;
 
+        box-shadow:
+            0 4px 15px rgba(0,0,0,.06);
 
+    }
 
 
-/* ==========================
-   LOGOUT
-========================== */
+    .card {
 
+        background: white;
 
-.logout{
+        padding: 25px;
 
+        border-radius: 16px;
 
-    position:absolute;
+        box-shadow:
+            0 4px 15px rgba(0,0,0,.06);
 
+    }
 
-    bottom:25px;
 
+    button {
 
-    left:20px;
+        font-family: inherit;
 
+    }
 
-    right:20px;
 
+    /* ==========================
+       RESPONSIVO
+    ========================== */
 
-}
+    @media(max-width:800px) {
 
+        .sidebar {
 
+            width: 80px;
 
+            padding: 20px 10px;
 
+        }
 
-.logout form{
+        .logo h2,
 
+        .sidebar a span:not(.icone),
 
-    width:100%;
+        .usuario-info,
 
+        .menu-title {
 
-}
+            display: none;
 
+        }
 
+        .usuario {
 
+            padding: 8px;
 
+        }
 
+        .usuario-link {
 
-.logout button{
+            justify-content: center;
 
+        }
 
-    width:100%;
+        .content {
 
+            margin-left: 80px;
 
-    display:flex;
+            width: calc(100% - 80px);
 
+            padding: 20px;
 
-    align-items:center;
+        }
 
+        .logout button {
 
-    justify-content:center;
+            font-size: 0;
 
+        }
 
-    gap:10px;
+        .logout button::before {
 
+            content: '↪';
 
-    background:#dc2626;
+            font-size: 20px;
 
+        }
 
-    color:white;
-
-
-    border:none;
-
-
-    border-radius:10px;
-
-
-    padding:13px;
-
-
-    font-size:15px;
-
-
-    cursor:pointer;
-
-
-    transition:.3s;
-
-
-}
-
-
-
-
-
-
-.logout button:hover{
-
-
-    background:#b91c1c;
-
-
-    transform:translateY(-2px);
-
-
-}
-
-
-
-
-
-.logout .arrow{
-
-
-    font-size:20px;
-
-
-    font-weight:bold;
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-/* ==========================
-   CONTEÚDO
-========================== */
-
-
-.content{
-
-
-    margin-left:270px;
-
-
-    width:calc(100% - 270px);
-
-
-    padding:35px;
-
-
-}
-
-
-
-
-
-
-.header{
-
-
-    background:white;
-
-
-    padding:25px;
-
-
-    border-radius:16px;
-
-
-    margin-bottom:25px;
-
-
-    box-shadow:
-    0 4px 15px rgba(0,0,0,.06);
-
-
-}
-
-
-
-
-
-
-.card{
-
-
-    background:white;
-
-
-    padding:25px;
-
-
-    border-radius:16px;
-
-
-    box-shadow:
-    0 4px 15px rgba(0,0,0,.06);
-
-
-}
-
-
-
-
-
-button{
-
-
-    font-family:inherit;
-
-
-}
-
-
-
-
-
-
-
-/* ==========================
-   RESPONSIVO
-========================== */
-
-
-@media(max-width:800px){
-
-
-
-.sidebar{
-
-
-    width:80px;
-
-
-    padding:20px 10px;
-
-
-}
-
-
-
-.logo h2,
-
-.logo p,
-
-.sidebar a span{
-
-
-    display:none;
-
-
-}
-
-
-
-
-.content{
-
-
-    margin-left:80px;
-
-
-    width:calc(100% - 80px);
-
-
-    padding:20px;
-
-
-}
-
-
-
-}
-
-
-
-
-
+    }
 
 </style>
 
 
 </head>
 
-
-
-
-
 <body>
-
-
-
 
 
 <div class="sidebar">
 
 
+    {{-- LOGO --}}
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            🛒
+        </div>
+
+        <h2>
+            SmartCatalog
+        </h2>
+
+    </div>
 
 
+    {{-- PERFIL DO USUÁRIO --}}
 
-<div class="logo">
+    <div class="usuario">
+
+        <a
+            href="{{ route('profile.edit') }}"
+            class="usuario-link"
+        >
+
+            @if(auth()->user()->foto)
+
+                <img
+                    src="{{ asset('storage/' . auth()->user()->foto) }}"
+                    alt="Foto de perfil"
+                    class="usuario-foto"
+                >
+
+            @else
+
+                <div class="usuario-foto">
+
+                    {{ strtoupper(
+                        substr(
+                            auth()->user()->name,
+                            0,
+                            1
+                        )
+                    ) }}
+
+                </div>
+
+            @endif
 
 
+            <div class="usuario-info">
 
-@if(auth()->user()->foto)
+                <div class="usuario-nome">
 
+                    {{ auth()->user()->name }}
 
-<img
+                </div>
 
-src="{{ asset('storage/'.auth()->user()->foto) }}"
+                <div class="usuario-perfil">
 
-style="
-width:50px;
-height:50px;
-border-radius:50%;
-object-fit:cover;
-border:3px solid #2563eb;
-"
+                    Meu perfil
 
->
+                </div>
 
+            </div>
 
-@else
+        </a>
 
-
-<div class="logo-icon">
+    </div>
 
 
-{{ strtoupper(substr(auth()->user()->name,0,1)) }}
+    {{-- MENU --}}
+
+    <div class="menu">
+
+        <div class="menu-title">
+            Menu
+        </div>
+
+
+        <a href="{{ route('admin.dashboard') }}">
+
+            <span class="icone">
+                📊
+            </span>
+
+            <span>
+                Dashboard
+            </span>
+
+        </a>
+
+
+        <a href="{{ route('admin.categorias.index') }}">
+
+            <span class="icone">
+                📂
+            </span>
+
+            <span>
+                Categorias
+            </span>
+
+        </a>
+
+
+        <a href="{{ route('admin.produtos.index') }}">
+
+            <span class="icone">
+                📦
+            </span>
+
+            <span>
+                Produtos
+            </span>
+
+        </a>
+
+
+        <a href="{{ route('admin.estoque.index') }}">
+
+            <span class="icone">
+                📋
+            </span>
+
+            <span>
+                Estoque
+            </span>
+
+        </a>
+
+
+        {{-- PEDIDOS --}}
+
+        <a href="{{ route('admin.pedidos.index') }}">
+
+            <span class="icone">
+                🧾
+            </span>
+
+            <span>
+                Pedidos
+            </span>
+
+        </a>
+
+
+        <a href="{{ route('profile.edit') }}">
+
+            <span class="icone">
+                👤
+            </span>
+
+            <span>
+                Meu Perfil
+            </span>
+
+        </a>
+
+    </div>
+
+
+    {{-- LOGOUT --}}
+
+    <div class="logout">
+
+        <form
+            method="POST"
+            action="{{ route('logout') }}"
+        >
+
+            @csrf
+
+            <button type="submit">
+
+                <span>
+                    ↪
+                </span>
+
+                Sair
+
+            </button>
+
+        </form>
+
+    </div>
 
 
 </div>
 
 
-@endif
-
-
-
-
-
-
-<div>
-
-
-<h2>
-SmartCatalog
-</h2>
-
-
-<p>
-
-{{ auth()->user()->name }}
-
-</p>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-<div class="menu-title">
-
-Menu
-
-</div>
-
-
-
-
-
-
-
-<a href="{{ route('admin.dashboard') }}">
-
-
-<span>
-📊
-</span>
-
-
-<span>
-Dashboard
-</span>
-
-
-</a>
-
-
-
-
-
-
-
-<a href="{{ route('admin.categorias.index') }}">
-
-
-<span>
-📂
-</span>
-
-
-<span>
-Categorias
-</span>
-
-
-</a>
-
-
-
-
-
-
-
-<a href="{{ route('admin.produtos.index') }}">
-
-
-<span>
-📦
-</span>
-
-
-<span>
-Produtos
-</span>
-
-
-</a>
-
-
-
-
-
-
-
-<a href="{{ route('profile.edit') }}">
-
-
-<span>
-👤
-</span>
-
-
-<span>
-Meu Perfil
-</span>
-
-
-</a>
-
-
-
-
-
-
-
-<div class="logout">
-
-
-<form method="POST" action="{{ route('logout') }}">
-
-
-@csrf
-
-
-
-<button type="submit">
-
-
-<span class="arrow">
-↪
-</span>
-
-
-Sair
-
-
-</button>
-
-
-</form>
-
-
-</div>
-
-
-
-
-
-</div>
-
-
-
-
-
-
-
-
+{{-- CONTEÚDO --}}
 
 <div class="content">
 
-
-@yield('content')
-
+    @yield('content')
 
 </div>
-
-
-
-
 
 
 </body>
