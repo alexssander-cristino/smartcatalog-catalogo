@@ -3,212 +3,194 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProdutoRequest;
 use App\Models\Produto;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ProdutoController extends Controller
 {
-
-
+    /**
+     * Listar produtos
+     */
     public function index(Request $request)
     {
+        $query = Produto::with('categoria', 'imagens');
 
-        $query = Produto::with([
-            'categoria',
-            'imagens'
-        ]);
+        if ($request->filled('busca')) {
+            $busca = $request->busca;
 
-
-
-        if ($request->filled('nome')) {
-
-            $query->where(
-                'nome',
-                'ILIKE',
-                '%' . $request->nome . '%'
-            );
-
+            $query->where(function ($q) use ($busca) {
+                $q->where('nome', 'like', "%{$busca}%")
+                    ->orWhere('descricao', 'like', "%{$busca}%");
+            });
         }
-
-
-
-        if ($request->filled('marca')) {
-
-            $query->where(
-                'marca',
-                'ILIKE',
-                '%' . $request->marca . '%'
-            );
-
-        }
-
-
 
         if ($request->filled('categoria_id')) {
-
             $query->where(
                 'categoria_id',
                 $request->categoria_id
             );
-
         }
 
-
-
-        if ($request->has('ativo')) {
-
+        if ($request->filled('ativo')) {
             $query->where(
                 'ativo',
-                $request->ativo
+                filter_var($request->ativo, FILTER_VALIDATE_BOOLEAN)
             );
-
         }
 
-
-
-        if ($request->has('destaque')) {
-
-            $query->where(
-                'destaque',
-                $request->destaque
-            );
-
-        }
-
-
-
-        return response()->json(
-
-            $query
+        $produtos = $query
             ->orderBy('nome')
-            ->paginate(20)
-
-        );
-
-    }
-
-
-
-
-
-    public function store(ProdutoRequest $request)
-    {
-
-        $produto = Produto::create(
-            $request->validated()
-        );
-
+            ->get();
 
         return response()->json([
-
-            'message'=>'Produto cadastrado com sucesso.',
-
-            'data'=>Produto::with([
-                'categoria',
-                'imagens'
-            ])
-            ->find($produto->id)
-
-        ],201);
-
+            'success' => true,
+            'data' => $produtos,
+        ]);
     }
 
-
-
-
-
-    public function show(string $id)
+    /**
+     * Criar produto
+     */
+    public function store(Request $request)
     {
+        $validated = $request->validate([
+            'nome' => [
+                'required',
+                'string',
+                'max:255',
+            ],
 
-        $produto = Produto::with([
+            'descricao' => [
+                'nullable',
+                'string',
+            ],
 
-            'categoria',
-            'imagens'
+            'preco' => [
+                'required',
+                'numeric',
+                'min:0',
+            ],
 
-        ])
-        ->findOrFail($id);
+            'estoque' => [
+                'required',
+                'integer',
+                'min:0',
+            ],
 
+            'categoria_id' => [
+                'nullable',
+                'integer',
+                'exists:categorias,id',
+            ],
 
-
-        return response()->json($produto);
-
-    }
-
-
-
-
-
-    public function update(
-        ProdutoRequest $request,
-        string $id
-    )
-    {
-
-        $produto = Produto::findOrFail($id);
-
-
-        $produto->update(
-            $request->validated()
-        );
-
-
-
-        return response()->json([
-
-            'message'=>'Produto atualizado com sucesso.',
-
-            'data'=>Produto::with([
-                'categoria',
-                'imagens'
-            ])
-            ->find($id)
-
+            'ativo' => [
+                'nullable',
+                'boolean',
+            ],
         ]);
 
-    }
-
-
-
-
-
-    public function destroy(string $id)
-    {
-
-        $produto = Produto::with('imagens')
-            ->findOrFail($id);
-
-
-
-        foreach($produto->imagens as $imagem){
-
-
-            if(Storage::disk('public')
-                ->exists($imagem->imagem)){
-
-
-                Storage::disk('public')
-                    ->delete($imagem->imagem);
-
-            }
-
-
+        if (!isset($validated['ativo'])) {
+            $validated['ativo'] = true;
         }
 
+        $produto = Produto::create($validated);
 
+        $produto->load('categoria', 'imagens');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Produto criado com sucesso.',
+            'data' => $produto,
+        ], 201);
+    }
+
+    /**
+     * Mostrar produto
+     */
+    public function show(Produto $produto)
+    {
+        $produto->load(
+            'categoria',
+            'imagens'
+        );
+
+        return response()->json([
+            'success' => true,
+            'data' => $produto,
+        ]);
+    }
+
+    /**
+     * Atualizar produto
+     */
+    public function update(Request $request, Produto $produto)
+    {
+        $validated = $request->validate([
+            'nome' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+
+            'descricao' => [
+                'nullable',
+                'string',
+            ],
+
+            'preco' => [
+                'required',
+                'numeric',
+                'min:0',
+            ],
+
+            'estoque' => [
+                'required',
+                'integer',
+                'min:0',
+            ],
+
+            'categoria_id' => [
+                'nullable',
+                'integer',
+                'exists:categorias,id',
+            ],
+
+            'ativo' => [
+                'nullable',
+                'boolean',
+            ],
+        ]);
+
+        $produto->update($validated);
+
+        $produto->load(
+            'categoria',
+            'imagens'
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Produto atualizado com sucesso.',
+            'data' => $produto,
+        ]);
+    }
+
+    /**
+     * Excluir produto
+     */
+    public function destroy(Produto $produto)
+    {
+        $produto->load('imagens');
+
+        foreach ($produto->imagens as $imagem) {
+            $imagem->delete();
+        }
 
         $produto->delete();
 
-
-
         return response()->json([
-
-            'message'=>'Produto removido com sucesso.'
-
+            'success' => true,
+            'message' => 'Produto excluído com sucesso.',
         ]);
-
     }
-
-
 }

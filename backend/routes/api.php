@@ -3,10 +3,11 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\CategoriaController;
 use App\Http\Controllers\Api\ProdutoController;
 use App\Http\Controllers\Api\ProdutoImagemController;
-use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\PedidoController;
 
 
 /*
@@ -28,7 +29,7 @@ use App\Http\Controllers\Api\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
-| Login
+| LOGIN
 |--------------------------------------------------------------------------
 |
 | POST /api/login
@@ -37,7 +38,7 @@ use App\Http\Controllers\Api\DashboardController;
 
 Route::post('/login', [
     AuthController::class,
-    'login'
+    'login',
 ])->name('api.login');
 
 
@@ -52,34 +53,45 @@ Route::post('/login', [
 
 Route::middleware('auth:sanctum')->group(function () {
 
-
     /*
     |--------------------------------------------------------------------------
-    | USUÁRIO AUTENTICADO
+    | USUÁRIO
     |--------------------------------------------------------------------------
-    |
+    */
+
+    /*
     | GET /api/user
     |
+    | Retorna os dados do usuário autenticado.
     */
 
     Route::get('/user', [
         AuthController::class,
-        'user'
+        'user',
     ])->name('api.user');
 
 
     /*
-    |--------------------------------------------------------------------------
-    | LOGOUT
-    |--------------------------------------------------------------------------
+    | PUT /api/user
     |
+    | Atualiza nome, e-mail e senha.
+    */
+
+    Route::put('/user', [
+        AuthController::class,
+        'updateProfile',
+    ])->name('api.user.update');
+
+
+    /*
     | POST /api/logout
     |
+    | Encerra a sessão/token atual.
     */
 
     Route::post('/logout', [
         AuthController::class,
-        'logout'
+        'logout',
     ])->name('api.logout');
 
 
@@ -94,7 +106,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/dashboard', [
         DashboardController::class,
-        'index'
+        'index',
     ])->name('api.dashboard');
 
 
@@ -140,39 +152,92 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | IMAGENS DOS PRODUTOS
+    | PEDIDOS
     |--------------------------------------------------------------------------
     |
+    | GET    /api/pedidos
+    | GET    /api/pedidos/{pedido}
+    |
+    */
+
+    Route::apiResource(
+        'pedidos',
+        PedidoController::class
+    )->only([
+        'index',
+        'show',
+    ]);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | IMAGENS DOS PRODUTOS
+    |--------------------------------------------------------------------------
+    */
+
+
+    /*
     | POST /api/produtos/{produto}/imagem
     |
+    | Envia uma imagem para determinado produto.
     */
 
     Route::post(
         '/produtos/{produto}/imagem',
         [
             ProdutoImagemController::class,
-            'store'
+            'store',
         ]
     )->name('api.produtos.imagem.store');
 
 
     /*
-    |--------------------------------------------------------------------------
-    | EXCLUIR IMAGEM
-    |--------------------------------------------------------------------------
-    |
     | DELETE /api/imagem/{imagem}
     |
+    | Exclui uma imagem do produto.
     */
 
     Route::delete(
         '/imagem/{imagem}',
         [
             ProdutoImagemController::class,
-            'destroy'
+            'destroy',
         ]
     )->name('api.produtos.imagem.destroy');
 
+    /*
+|--------------------------------------------------------------------------
+| ESTOQUE
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/estoque', [
+    EstoqueController::class,
+    'index',
+])->name('api.estoque.index');
+
+
+Route::get('/estoque/{produto}', [
+    EstoqueController::class,
+    'show',
+])->name('api.estoque.show');
+
+
+Route::post('/estoque/{produto}/entrada', [
+    EstoqueController::class,
+    'entrada',
+])->name('api.estoque.entrada');
+
+
+Route::post('/estoque/{produto}/saida', [
+    EstoqueController::class,
+    'saida',
+])->name('api.estoque.saida');
+
+
+Route::put('/estoque/{produto}/ajustar', [
+    EstoqueController::class,
+    'ajustar',
+])->name('api.estoque.ajustar');
 
 });
-

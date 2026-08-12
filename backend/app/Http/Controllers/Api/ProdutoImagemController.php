@@ -8,90 +8,60 @@ use App\Models\ProdutoImagem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-
 class ProdutoImagemController extends Controller
 {
-
-
-    public function store(Request $request, Produto $produto)
-    {
-
-
+    /**
+     * Adicionar imagem
+     */
+    public function store(
+        Request $request,
+        Produto $produto
+    ) {
         $request->validate([
-
             'imagem' => [
                 'required',
                 'image',
                 'mimes:jpg,jpeg,png,webp',
-                'max:2048'
-            ]
-
+                'max:5120',
+            ],
         ]);
 
-
-
-        $arquivo = $request
+        $caminho = $request
             ->file('imagem')
-            ->store(
-                'produtos',
-                'public'
-            );
-
-
+            ->store('produtos', 'public');
 
         $imagem = ProdutoImagem::create([
-
             'produto_id' => $produto->id,
-
-            'imagem' => $arquivo
-
+            'imagem' => $caminho,
         ]);
 
-
-
         return response()->json([
-
-            'message'=>'Imagem adicionada com sucesso.',
-
-            'data'=>ProdutoImagem::find($imagem->id)
-
-        ],201);
-
-
+            'success' => true,
+            'message' => 'Imagem adicionada com sucesso.',
+            'data' => $imagem,
+            'url' => asset(
+                'storage/' . $caminho
+            ),
+        ], 201);
     }
 
-
-
-
-
-    public function destroy(ProdutoImagem $imagem)
-    {
-
-
-        if(
-            Storage::disk('public')
-            ->exists($imagem->imagem)
-        ){
-
-            Storage::disk('public')
-            ->delete($imagem->imagem);
-
+    /**
+     * Excluir imagem
+     */
+    public function destroy(
+        ProdutoImagem $imagem
+    ) {
+        if ($imagem->imagem) {
+            Storage::disk('public')->delete(
+                $imagem->imagem
+            );
         }
-
-
 
         $imagem->delete();
 
-
-
         return response()->json([
-
-            'message'=>'Imagem removida com sucesso.'
-
+            'success' => true,
+            'message' => 'Imagem excluída com sucesso.',
         ]);
-
-
     }
-
-
 }

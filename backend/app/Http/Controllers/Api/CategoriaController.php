@@ -3,66 +3,108 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoriaRequest;
 use App\Models\Categoria;
 use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Listar categorias
+     */
+    public function index()
     {
-        $query = Categoria::query();
-
-        if ($request->filled('nome')) {
-            $query->where('nome', 'ILIKE', '%' . $request->nome . '%');
-        }
-
-        if ($request->has('ativo')) {
-            $query->where('ativo', $request->ativo);
-        }
-
-        return response()->json(
-            $query->orderBy('nome')->get()
-        );
-    }
-
-    public function store(CategoriaRequest $request)
-    {
-        $categoria = Categoria::create($request->validated());
+        $categorias = Categoria::orderBy('nome')->get();
 
         return response()->json([
-            'message' => 'Categoria cadastrada com sucesso.',
-            'data' => $categoria
-        ], 201);
-    }
-
-    public function show(string $id)
-    {
-        $categoria = Categoria::findOrFail($id);
-
-        return response()->json($categoria);
-    }
-
-    public function update(CategoriaRequest $request, string $id)
-    {
-        $categoria = Categoria::findOrFail($id);
-
-        $categoria->update($request->validated());
-
-        return response()->json([
-            'message' => 'Categoria atualizada com sucesso.',
-            'data' => $categoria
+            'success' => true,
+            'data' => $categorias,
         ]);
     }
 
-    public function destroy(string $id)
+    /**
+     * Criar categoria
+     */
+    public function store(Request $request)
     {
-        $categoria = Categoria::findOrFail($id);
+        $validated = $request->validate([
+            'nome' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:categorias,nome',
+            ],
+            'descricao' => [
+                'nullable',
+                'string',
+            ],
+        ]);
+
+        $categoria = Categoria::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Categoria criada com sucesso.',
+            'data' => $categoria,
+        ], 201);
+    }
+
+    /**
+     * Mostrar categoria
+     */
+    public function show(Categoria $categoria)
+    {
+        $categoria->load('produtos');
+
+        return response()->json([
+            'success' => true,
+            'data' => $categoria,
+        ]);
+    }
+
+    /**
+     * Atualizar categoria
+     */
+    public function update(Request $request, Categoria $categoria)
+    {
+        $validated = $request->validate([
+            'nome' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:categorias,nome,' . $categoria->id,
+            ],
+            'descricao' => [
+                'nullable',
+                'string',
+            ],
+        ]);
+
+        $categoria->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Categoria atualizada com sucesso.',
+            'data' => $categoria->fresh(),
+        ]);
+    }
+
+    /**
+     * Excluir categoria
+     */
+    public function destroy(Categoria $categoria)
+    {
+        if ($categoria->produtos()->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Não é possível excluir uma categoria que possui produtos.',
+            ], 422);
+        }
 
         $categoria->delete();
 
         return response()->json([
-            'message' => 'Categoria removida com sucesso.'
+            'success' => true,
+            'message' => 'Categoria excluída com sucesso.',
         ]);
     }
 }
