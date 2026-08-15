@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProdutoImagemController;
 use App\Http\Controllers\Admin\EstoqueController;
 use App\Http\Controllers\Admin\PedidoController;
 use App\Http\Controllers\Admin\RelatorioController;
+use App\Http\Controllers\Admin\CarrosselController;
 
 use App\Http\Controllers\CatalogoController;
 
@@ -242,5 +243,29 @@ Route::middleware('auth')
             ->name('relatorios.index');
 
 
+
+                    /*
+        |--------------------------------------------------------------------------
+        | Carrossel
+        |--------------------------------------------------------------------------
+        */
+
+        Route::resource(
+            'carrossel',
+            CarrosselController::class
+        )->only([
+            'index',
+            'create',
+            'store',
+            'destroy',
+        ]);
+
+        Route::patch(
+            '/carrossel/{carrossel}/toggle',
+            [
+                CarrosselController::class,
+                'toggle'
+            ]
+        )->name('carrossel.toggle');
     });
 

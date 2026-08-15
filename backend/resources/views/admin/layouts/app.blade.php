@@ -17,18 +17,43 @@
 
     <style>
 
+        /* =========================================================
+           RESET
+        ========================================================== */
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family:
+                'Segoe UI',
+                Arial,
+                Helvetica,
+                sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
             display: flex;
             min-height: 100vh;
-            background: #f1f5f9;
+            background: #f5f7fb;
+            color: #0f172a;
         }
+
+        a {
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
 
         /* =========================================================
            SIDEBAR
@@ -42,24 +67,35 @@
             background:
                 linear-gradient(
                     180deg,
-                    #111827,
-                    #1e293b
+                    #0f172a 0%,
+                    #172033 50%,
+                    #111827 100%
                 );
 
             color: white;
 
-            padding: 25px 20px;
+            padding: 24px 18px;
 
             position: fixed;
 
             left: 0;
             top: 0;
+            bottom: 0;
 
             display: flex;
             flex-direction: column;
 
             z-index: 1000;
+
+            border-right:
+                1px solid rgba(255,255,255,.05);
+
+            box-shadow:
+                8px 0 30px rgba(15,23,42,.08);
+
+            overflow-y: auto;
         }
+
 
         /* =========================================================
            LOGO
@@ -73,32 +109,48 @@
 
             gap: 12px;
 
-            margin-bottom: 30px;
+            margin-bottom: 28px;
+
+            padding:
+                4px 6px;
         }
 
         .logo-icon {
 
-            width: 45px;
-            height: 45px;
+            width: 44px;
+            height: 44px;
 
-            background: #2563eb;
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #3b82f6
+                );
 
-            border-radius: 12px;
+            border-radius: 13px;
 
             display: flex;
 
             align-items: center;
             justify-content: center;
 
-            font-size: 22px;
+            font-size: 21px;
+
+            box-shadow:
+                0 8px 20px rgba(37,99,235,.28);
         }
 
         .logo h2 {
 
-            font-size: 22px;
+            font-size: 21px;
 
-            font-weight: 700;
+            font-weight: 750;
+
+            letter-spacing: -.4px;
+
+            color: #ffffff;
         }
+
 
         /* =========================================================
            USUÁRIO
@@ -106,15 +158,38 @@
 
         .usuario {
 
-            background: rgba(255,255,255,.06);
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,.07),
+                    rgba(255,255,255,.035)
+                );
 
-            border: 1px solid rgba(255,255,255,.08);
+            border:
+                1px solid rgba(255,255,255,.08);
 
-            border-radius: 14px;
+            border-radius: 16px;
 
             padding: 14px;
 
-            margin-bottom: 30px;
+            margin-bottom: 28px;
+
+            transition:
+                background .25s ease,
+                border-color .25s ease,
+                transform .25s ease;
+        }
+
+        .usuario:hover {
+
+            background:
+                rgba(255,255,255,.09);
+
+            border-color:
+                rgba(255,255,255,.13);
+
+            transform:
+                translateY(-1px);
         }
 
         .usuario-link {
@@ -132,45 +207,60 @@
 
         .usuario-foto {
 
-            width: 52px;
-            height: 52px;
+            width: 50px;
+            height: 50px;
+
+            min-width: 50px;
 
             border-radius: 50%;
 
             object-fit: cover;
 
-            border: 3px solid #2563eb;
+            border:
+                3px solid #3b82f6;
 
-            background: #334155;
+            background:
+                linear-gradient(
+                    135deg,
+                    #334155,
+                    #475569
+                );
 
             display: flex;
 
             align-items: center;
             justify-content: center;
 
-            font-size: 20px;
+            font-size: 19px;
 
-            font-weight: bold;
+            font-weight: 700;
 
             flex-shrink: 0;
+
+            box-shadow:
+                0 0 0 3px rgba(59,130,246,.12);
         }
 
         .usuario-info {
 
             min-width: 0;
+
+            flex: 1;
         }
 
         .usuario-nome {
 
-            font-size: 15px;
+            font-size: 14px;
 
-            font-weight: 600;
+            font-weight: 650;
 
             white-space: nowrap;
 
             overflow: hidden;
 
             text-overflow: ellipsis;
+
+            color: #f8fafc;
         }
 
         .usuario-perfil {
@@ -179,8 +269,9 @@
 
             font-size: 12px;
 
-            margin-top: 3px;
+            margin-top: 4px;
         }
+
 
         /* =========================================================
            MENU
@@ -193,15 +284,19 @@
 
         .menu-title {
 
-            color: #94a3b8;
+            color: #64748b;
 
-            font-size: 12px;
+            font-size: 10px;
+
+            font-weight: 700;
 
             text-transform: uppercase;
 
-            margin-bottom: 12px;
+            margin:
+                0 10px 10px;
 
-            letter-spacing: .5px;
+            letter-spacing:
+                1.2px;
         }
 
         .sidebar a {
@@ -212,43 +307,74 @@
 
             gap: 12px;
 
-            color: #e5e7eb;
+            color: #cbd5e1;
 
             text-decoration: none;
 
-            padding: 13px 15px;
+            padding:
+                12px 13px;
 
-            border-radius: 10px;
+            border-radius: 11px;
 
-            margin-bottom: 8px;
+            margin-bottom: 5px;
 
-            transition: .3s;
+            transition:
+                background .2s ease,
+                color .2s ease,
+                transform .2s ease;
         }
 
         .sidebar a:hover {
 
-            background: #2563eb;
+            background:
+                rgba(59,130,246,.13);
 
-            color: white;
+            color: #ffffff;
 
-            transform: translateX(5px);
+            transform:
+                translateX(3px);
         }
 
         .sidebar a.ativo {
 
-            background: #2563eb;
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #1d4ed8
+                );
 
             color: white;
+
+            box-shadow:
+                0 6px 18px rgba(37,99,235,.25);
         }
 
         .sidebar a .icone {
 
-            width: 25px;
+            width: 28px;
+
+            height: 28px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
 
             text-align: center;
 
-            font-size: 18px;
+            font-size: 17px;
+
+            flex-shrink: 0;
         }
+
+        .sidebar a span:not(.icone) {
+
+            font-size: 14px;
+
+            font-weight: 500;
+        }
+
 
         /* =========================================================
            LOGOUT
@@ -256,7 +382,12 @@
 
         .logout {
 
-            margin-top: 20px;
+            margin-top: 18px;
+
+            padding-top: 16px;
+
+            border-top:
+                1px solid rgba(255,255,255,.07);
         }
 
         .logout form {
@@ -274,31 +405,46 @@
 
             justify-content: center;
 
-            gap: 10px;
+            gap: 9px;
 
-            background: #dc2626;
+            background:
+                rgba(220,38,38,.12);
 
-            color: white;
+            color: #fca5a5;
 
-            border: none;
+            border:
+                1px solid rgba(248,113,113,.12);
 
-            border-radius: 10px;
+            border-radius: 11px;
 
-            padding: 13px;
+            padding: 12px;
 
-            font-size: 15px;
+            font-size: 14px;
+
+            font-weight: 600;
 
             cursor: pointer;
 
-            transition: .3s;
+            transition:
+                background .2s ease,
+                color .2s ease,
+                transform .2s ease;
         }
 
         .logout button:hover {
 
-            background: #b91c1c;
+            background:
+                #dc2626;
 
-            transform: translateY(-2px);
+            color: white;
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 6px 18px rgba(220,38,38,.20);
         }
+
 
         /* =========================================================
            CONTEÚDO
@@ -308,46 +454,97 @@
 
             margin-left: 270px;
 
-            width: calc(100% - 270px);
+            width:
+                calc(100% - 270px);
 
-            padding: 35px;
+            padding:
+                32px;
 
             min-height: 100vh;
+
+            overflow-x: hidden;
         }
 
+
         /* =========================================================
-           DASHBOARD
+           DASHBOARD HEADER
         ========================================================== */
 
         .dashboard-header {
 
-            background: white;
+            position: relative;
 
-            padding: 25px;
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff 0%,
+                    #f8fafc 100%
+                );
 
-            border-radius: 16px;
+            padding:
+                27px 30px;
 
-            margin-bottom: 25px;
+            border-radius: 18px;
+
+            margin-bottom: 24px;
+
+            border:
+                1px solid #e8edf5;
 
             box-shadow:
-                0 4px 15px rgba(0,0,0,.06);
+                0 8px 30px rgba(15,23,42,.05);
+
+            overflow: hidden;
+        }
+
+        .dashboard-header::after {
+
+            content: '';
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            right: -70px;
+            top: -90px;
+
+            background:
+                rgba(37,99,235,.07);
+
+            border-radius: 50%;
         }
 
         .dashboard-header h1 {
 
+            position: relative;
+
+            z-index: 1;
+
             margin: 0;
 
-            color: #111827;
+            color: #0f172a;
 
-            font-size: 28px;
+            font-size: 27px;
+
+            font-weight: 750;
+
+            letter-spacing: -.6px;
         }
 
         .dashboard-header p {
 
-            margin-top: 6px;
+            position: relative;
+
+            z-index: 1;
+
+            margin-top: 7px;
 
             color: #64748b;
+
+            font-size: 14px;
         }
+
 
         /* =========================================================
            CARDS
@@ -358,23 +555,68 @@
             display: grid;
 
             grid-template-columns:
-                repeat(4, 1fr);
+                repeat(4, minmax(0, 1fr));
 
             gap: 18px;
 
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .card-dashboard {
 
-            background: white;
+            position: relative;
 
-            padding: 22px;
+            background: #ffffff;
 
-            border-radius: 16px;
+            padding:
+                21px;
+
+            min-height: 145px;
+
+            border-radius: 17px;
+
+            border:
+                1px solid #e8edf5;
 
             box-shadow:
-                0 4px 15px rgba(0,0,0,.06);
+                0 5px 20px rgba(15,23,42,.045);
+
+            overflow: hidden;
+
+            transition:
+                transform .22s ease,
+                box-shadow .22s ease,
+                border-color .22s ease;
+        }
+
+        .card-dashboard::after {
+
+            content: '';
+
+            position: absolute;
+
+            width: 90px;
+            height: 90px;
+
+            right: -35px;
+            bottom: -45px;
+
+            background:
+                rgba(37,99,235,.035);
+
+            border-radius: 50%;
+        }
+
+        .card-dashboard:hover {
+
+            transform:
+                translateY(-4px);
+
+            border-color:
+                #dbe5f3;
+
+            box-shadow:
+                0 12px 30px rgba(15,23,42,.08);
         }
 
         .card-top {
@@ -384,44 +626,71 @@
             justify-content: space-between;
 
             align-items: center;
+
+            gap: 15px;
         }
 
         .card-icon {
 
             width: 48px;
-
             height: 48px;
 
-            border-radius: 12px;
+            border-radius: 13px;
 
             display: flex;
 
             align-items: center;
-
             justify-content: center;
 
-            font-size: 22px;
+            font-size: 21px;
+
+            flex-shrink: 0;
+
+            box-shadow:
+                inset 0 0 0 1px rgba(0,0,0,.025);
         }
 
         .card-title {
 
-            margin-top: 18px;
+            margin-top: 17px;
 
             color: #64748b;
 
-            font-size: 14px;
+            font-size: 13px;
+
+            font-weight: 600;
         }
 
         .card-value {
 
             margin-top: 4px;
 
-            color: #111827;
+            color: #0f172a;
 
             font-size: 28px;
 
+            line-height: 1.2;
+
             font-weight: 800;
+
+            letter-spacing: -.7px;
         }
+
+
+        /* =========================================================
+           SEGUNDA LINHA
+        ========================================================== */
+
+        .cards + .cards {
+
+            margin-top: 0;
+        }
+
+        .cards + .cards .card-dashboard {
+
+            min-height: 125px;
+        }
+
 
         /* =========================================================
            GRID DO DASHBOARD
@@ -432,55 +701,84 @@
             display: grid;
 
             grid-template-columns:
-                1fr 1fr;
+                repeat(2, minmax(0, 1fr));
 
             gap: 20px;
 
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
+
+
+        /* =========================================================
+           BOX
+        ========================================================== */
 
         .dashboard-box {
 
-            background: white;
+            background: #ffffff;
 
-            border-radius: 16px;
+            border-radius: 17px;
+
+            border:
+                1px solid #e8edf5;
 
             box-shadow:
-                0 4px 15px rgba(0,0,0,.06);
+                0 5px 20px rgba(15,23,42,.045);
 
             overflow: hidden;
+
+            transition:
+                box-shadow .2s ease;
+        }
+
+        .dashboard-box:hover {
+
+            box-shadow:
+                0 9px 28px rgba(15,23,42,.065);
         }
 
         .box-header {
 
-            padding: 20px 22px;
+            display: flex;
+
+            flex-direction: column;
+
+            padding:
+                19px 22px;
 
             border-bottom:
-                1px solid #e5e7eb;
+                1px solid #edf1f6;
+
+            background:
+                #ffffff;
         }
 
         .box-header h2 {
 
             margin: 0;
 
-            color: #111827;
+            color: #0f172a;
 
-            font-size: 18px;
+            font-size: 17px;
+
+            font-weight: 700;
         }
 
         .box-header p {
 
             margin-top: 5px;
 
-            color: #64748b;
+            color: #94a3b8;
 
-            font-size: 13px;
+            font-size: 12px;
         }
 
         .box-body {
 
-            padding: 20px;
+            padding:
+                7px 22px 15px;
         }
+
 
         /* =========================================================
            PRODUTOS E PEDIDOS
@@ -497,10 +795,14 @@
 
             gap: 15px;
 
-            padding: 13px 0;
+            padding:
+                14px 0;
 
             border-bottom:
                 1px solid #f1f5f9;
+
+            transition:
+                background .2s ease;
         }
 
         .produto-item:last-child,
@@ -513,53 +815,71 @@
         .pedido-info {
 
             min-width: 0;
+
+            flex: 1;
         }
 
         .produto-nome,
         .pedido-numero {
 
-            font-weight: 700;
+            font-weight: 650;
 
-            color: #111827;
+            color: #1e293b;
+
+            font-size: 14px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
         }
 
         .produto-categoria,
         .pedido-cliente {
 
-            margin-top: 3px;
+            margin-top: 4px;
 
             color: #94a3b8;
 
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .produto-preco,
         .pedido-total {
 
-            font-weight: 800;
+            font-weight: 750;
 
-            color: #111827;
+            color: #0f172a;
+
+            font-size: 13px;
 
             white-space: nowrap;
         }
 
+
         /* =========================================================
-           STATUS DOS PEDIDOS
+           STATUS
         ========================================================== */
 
         .pedido-status {
 
-            display: inline-block;
+            display: inline-flex;
 
-            margin-top: 5px;
+            align-items: center;
 
-            padding: 4px 9px;
+            margin-top: 6px;
+
+            padding:
+                4px 9px;
 
             border-radius: 20px;
 
-            font-size: 11px;
+            font-size: 10px;
 
             font-weight: 700;
+
+            letter-spacing: .1px;
         }
 
         .status-emitido {
@@ -583,18 +903,23 @@
             color: #475569;
         }
 
+
         /* =========================================================
            VAZIO
         ========================================================== */
 
         .empty {
 
-            padding: 30px;
+            padding:
+                35px 20px;
 
             text-align: center;
 
             color: #94a3b8;
+
+            font-size: 13px;
         }
+
 
         /* =========================================================
            ACESSOS RÁPIDOS
@@ -605,9 +930,9 @@
             display: grid;
 
             grid-template-columns:
-                repeat(4, 1fr);
+                repeat(3, minmax(0, 1fr));
 
-            gap: 15px;
+            gap: 13px;
         }
 
         .atalho {
@@ -618,20 +943,26 @@
 
             gap: 12px;
 
-            padding: 18px;
+            padding:
+                15px;
 
-            background: white;
+            background:
+                #f8fafc;
 
-            border-radius: 14px;
+            border:
+                1px solid #edf1f6;
+
+            border-radius: 13px;
 
             text-decoration: none;
 
             color: #111827;
 
-            box-shadow:
-                0 4px 15px rgba(0,0,0,.06);
-
-            transition: .2s;
+            transition:
+                transform .2s ease,
+                background .2s ease,
+                border-color .2s ease,
+                box-shadow .2s ease;
         }
 
         .atalho:hover {
@@ -639,27 +970,31 @@
             transform:
                 translateY(-3px);
 
+            background:
+                #ffffff;
+
+            border-color:
+                #dbe5f3;
+
             box-shadow:
-                0 8px 20px rgba(0,0,0,.09);
+                0 8px 20px rgba(15,23,42,.07);
         }
 
         .atalho-icon {
 
-            width: 45px;
+            width: 43px;
+            height: 43px;
 
-            height: 45px;
-
-            border-radius: 10px;
+            border-radius: 11px;
 
             background: #eff6ff;
 
             display: flex;
 
             align-items: center;
-
             justify-content: center;
 
-            font-size: 21px;
+            font-size: 20px;
 
             flex-shrink: 0;
         }
@@ -667,26 +1002,81 @@
         .atalho strong {
 
             display: block;
+
+            color: #1e293b;
+
+            font-size: 13px;
+
+            font-weight: 700;
         }
 
         .atalho span {
 
-            color: #64748b;
+            display: block;
 
-            font-size: 12px;
+            margin-top: 3px;
+
+            color: #94a3b8;
+
+            font-size: 10px;
         }
 
+
         /* =========================================================
-           RESPONSIVO DASHBOARD
+           SCROLLBAR
         ========================================================== */
 
-        @media(max-width:1100px) {
+        .sidebar::-webkit-scrollbar {
+
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+
+            background:
+                rgba(148,163,184,.25);
+
+            border-radius: 10px;
+        }
+
+
+        /* =========================================================
+           RESPONSIVO 1200
+        ========================================================== */
+
+        @media(max-width:1200px) {
+
+            .content {
+
+                padding:
+                    25px;
+            }
 
             .cards {
 
                 grid-template-columns:
-                    repeat(2, 1fr);
+                    repeat(2, minmax(0, 1fr));
             }
+
+            .atalhos {
+
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+        }
+
+
+        /* =========================================================
+           RESPONSIVO 900
+        ========================================================== */
+
+        @media(max-width:900px) {
 
             .dashboard-grid {
 
@@ -694,29 +1084,8 @@
                     1fr;
             }
 
-            .atalhos {
-
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
-
         }
 
-        @media(max-width:700px) {
-
-            .cards {
-
-                grid-template-columns:
-                    1fr;
-            }
-
-            .atalhos {
-
-                grid-template-columns:
-                    1fr;
-            }
-
-        }
 
         /* =========================================================
            RESPONSIVO SIDEBAR
@@ -726,10 +1095,27 @@
 
             .sidebar {
 
-                width: 80px;
+                width: 78px;
 
                 padding:
-                    20px 10px;
+                    18px 9px;
+
+                align-items: center;
+            }
+
+            .logo {
+
+                justify-content: center;
+
+                margin-bottom: 24px;
+
+                padding: 0;
+            }
+
+            .logo-icon {
+
+                width: 45px;
+                height: 45px;
             }
 
             .logo h2,
@@ -742,7 +1128,11 @@
 
             .usuario {
 
-                padding: 8px;
+                width: 58px;
+
+                padding: 6px;
+
+                margin-bottom: 25px;
             }
 
             .usuario-link {
@@ -750,19 +1140,62 @@
                 justify-content: center;
             }
 
-            .content {
+            .usuario-foto {
 
-                margin-left: 80px;
+                width: 45px;
+                height: 45px;
 
-                width:
-                    calc(100% - 80px);
+                min-width: 45px;
+            }
 
-                padding: 20px;
+            .sidebar a {
+
+                width: 58px;
+
+                height: 48px;
+
+                padding: 8px;
+
+                justify-content: center;
+
+                margin-bottom: 6px;
+            }
+
+            .sidebar a .icone {
+
+                width: auto;
+
+                font-size: 19px;
+            }
+
+            .sidebar a:hover {
+
+                transform:
+                    translateX(0)
+                    scale(1.03);
+            }
+
+            .logout {
+
+                width: 100%;
             }
 
             .logout button {
 
+                width: 58px;
+
+                height: 48px;
+
+                padding: 8px;
+
+                margin: 0 auto;
+
                 font-size: 0;
+            }
+
+            .logout button span {
+
+                display: none;
             }
 
             .logout button::before {
@@ -770,6 +1203,168 @@
                 content: '↪';
 
                 font-size: 20px;
+            }
+
+            .content {
+
+                margin-left: 78px;
+
+                width:
+                    calc(100% - 78px);
+
+                padding:
+                    20px;
+            }
+
+        }
+
+
+        /* =========================================================
+           RESPONSIVO 600
+        ========================================================== */
+
+        @media(max-width:600px) {
+
+            .content {
+
+                padding:
+                    14px;
+            }
+
+            .dashboard-header {
+
+                padding:
+                    21px;
+
+                border-radius: 15px;
+            }
+
+            .dashboard-header h1 {
+
+                font-size: 22px;
+            }
+
+            .dashboard-header p {
+
+                font-size: 12px;
+            }
+
+            .cards {
+
+                grid-template-columns:
+                    1fr;
+
+                gap: 12px;
+
+                margin-bottom: 12px;
+            }
+
+            .card-dashboard {
+
+                min-height: auto;
+
+                padding:
+                    18px;
+            }
+
+            .dashboard-grid {
+
+                gap: 12px;
+            }
+
+            .dashboard-box {
+
+                border-radius: 14px;
+            }
+
+            .box-header {
+
+                padding:
+                    17px;
+            }
+
+            .box-body {
+
+                padding:
+                    5px 17px 12px;
+            }
+
+            .atalhos {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+            .atalho {
+
+                padding:
+                    14px;
+            }
+
+        }
+
+
+        /* =========================================================
+           RESPONSIVO 420
+        ========================================================== */
+
+        @media(max-width:420px) {
+
+            .sidebar {
+
+                width: 64px;
+
+                padding:
+                    15px 6px;
+            }
+
+            .usuario {
+
+                width: 48px;
+            }
+
+            .usuario-foto {
+
+                width: 38px;
+                height: 38px;
+
+                min-width: 38px;
+
+                font-size: 15px;
+            }
+
+            .sidebar a {
+
+                width: 48px;
+
+                height: 45px;
+            }
+
+            .logout button {
+
+                width: 48px;
+            }
+
+            .content {
+
+                margin-left: 64px;
+
+                width:
+                    calc(100% - 64px);
+
+                padding:
+                    10px;
+            }
+
+            .dashboard-header {
+
+                padding:
+                    18px;
+            }
+
+            .card-value {
+
+                font-size: 25px;
             }
 
         }
@@ -780,11 +1375,13 @@
 
 <body>
 
+
 {{-- =========================================================
      SIDEBAR
 ========================================================== --}}
 
 <div class="sidebar">
+
 
     {{-- LOGO --}}
 
@@ -914,6 +1511,24 @@
         </a>
 
 
+        {{-- CARROSSEL --}}
+
+        <a
+            href="{{ route('admin.carrossel.index') }}"
+            class="{{ request()->routeIs('admin.carrossel.*') ? 'ativo' : '' }}"
+        >
+
+            <span class="icone">
+                🎞️
+            </span>
+
+            <span>
+                Carrossel
+            </span>
+
+        </a>
+
+
         {{-- ESTOQUE --}}
 
         <a
@@ -1006,6 +1621,7 @@
 
 
 @if(request()->routeIs('admin.dashboard'))
+
 
     {{-- =====================================================
          DASHBOARD
@@ -1161,9 +1777,9 @@
 
             <div
                 style="
-                    margin-top:5px;
+                    margin-top:6px;
                     color:#94a3b8;
-                    font-size:12px;
+                    font-size:11px;
                 "
             >
                 {{ $produtosInativos ?? 0 }}
@@ -1239,9 +1855,7 @@
     <div class="dashboard-grid">
 
 
-        {{-- =================================================
-             ÚLTIMOS PRODUTOS
-        ================================================== --}}
+        {{-- ÚLTIMOS PRODUTOS --}}
 
         <div class="dashboard-box">
 
@@ -1271,7 +1885,6 @@
                                 {{ $produto->nome }}
 
                             </div>
-
 
                             <div class="produto-categoria">
 
@@ -1321,9 +1934,7 @@
         </div>
 
 
-        {{-- =================================================
-             ÚLTIMOS PEDIDOS
-        ================================================== --}}
+        {{-- ÚLTIMOS PEDIDOS --}}
 
         <div class="dashboard-box">
 
@@ -1354,11 +1965,6 @@
 
                             </div>
 
-
-                            {{-- CLIENTE
-                                 NÃO DEPENDE DE RELACIONAMENTO
-                                 cliente
-                            --}}
 
                             <div class="pedido-cliente">
 
@@ -1577,30 +2183,58 @@
 
                 </a>
 
+
                 {{-- RELATÓRIOS --}}
 
-<a
-    href="{{ route('admin.relatorios.index') }}"
-    class="atalho"
->
+                <a
+                    href="{{ route('admin.relatorios.index') }}"
+                    class="atalho"
+                >
 
-    <div class="atalho-icon">
-        📊
-    </div>
+                    <div class="atalho-icon">
+                        📊
+                    </div>
 
-    <div>
+                    <div>
 
-        <strong>
-            Relatórios
-        </strong>
+                        <strong>
+                            Relatórios
+                        </strong>
 
-        <span>
-            Visualizar relatórios
-        </span>
+                        <span>
+                            Visualizar relatórios
+                        </span>
 
-    </div>
+                    </div>
 
-</a>
+                </a>
+
+
+                {{-- CARROSSEL --}}
+
+                <a
+                    href="{{ route('admin.carrossel.index') }}"
+                    class="atalho"
+                >
+
+                    <div class="atalho-icon">
+                        🎞️
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Carrossel
+                        </strong>
+
+                        <span>
+                            Gerenciar imagens e vídeos
+                        </span>
+
+                    </div>
+
+                </a>
+
 
             </div>
 
@@ -1614,9 +2248,6 @@
 
     {{-- =====================================================
          TODAS AS OUTRAS PÁGINAS
-         
-         Produtos, Categorias, Estoque, Pedidos,
-         Perfil etc. entram aqui.
     ====================================================== --}}
 
     @yield('content')
