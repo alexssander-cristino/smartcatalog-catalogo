@@ -35,7 +35,7 @@ class CarrosselController extends Controller
 
 
     /**
-     * Salva imagem ou vídeo.
+     * Salva imagem ou vídeo no Cloudflare R2.
      */
     public function store(Request $request)
     {
@@ -71,13 +71,25 @@ class CarrosselController extends Controller
         ]);
 
 
-        $arquivo = $request
-            ->file('arquivo')
-            ->store(
-                'carrossel',
-                'public'
-            );
+        /*
+        |--------------------------------------------------------------------------
+        | Upload para o Cloudflare R2
+        |--------------------------------------------------------------------------
+        */
 
+        $arquivo = $request
+    ->file('arquivo')
+    ->store(
+        'carrossel',
+        'r2'
+    );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Salva referência no banco
+        |--------------------------------------------------------------------------
+        */
 
         Carrossel::create([
             'tipo' => $request->tipo,
@@ -104,19 +116,14 @@ class CarrosselController extends Controller
 
 
     /**
-     * Exclui o conteúdo.
+     * Exclui o conteúdo do R2.
      */
     public function destroy(Carrossel $carrossel)
     {
-        if (
-            $carrossel->arquivo &&
-            Storage::disk('public')->exists(
-                $carrossel->arquivo
-            )
-        ) {
-            Storage::disk('public')->delete(
-                $carrossel->arquivo
-            );
+        if ($carrossel->arquivo) {
+
+            Storage::disk('r2')
+                ->delete($carrossel->arquivo);
         }
 
 

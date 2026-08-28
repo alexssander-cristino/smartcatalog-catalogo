@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\CategoriaController;
 use App\Http\Controllers\Api\ProdutoController;
 use App\Http\Controllers\Api\ProdutoImagemController;
 use App\Http\Controllers\Api\PedidoController;
+use App\Http\Controllers\Api\EstoqueController;
 
 
 /*

@@ -26,17 +26,33 @@ class ProdutoImagemController extends Controller
             ],
         ]);
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Upload para o Cloudflare R2
+        |--------------------------------------------------------------------------
+        */
+
         $arquivo = $request
-            ->file('imagem')
-            ->store(
-                'produtos',
-                'public'
-            );
+    ->file('imagem')
+    ->store(
+        'produtos',
+        'r2'
+    );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Salva referência no banco
+        |--------------------------------------------------------------------------
+        */
 
         ProdutoImagem::create([
             'produto_id' => $produto->id,
+
             'imagem' => $arquivo,
         ]);
+
 
         return redirect()
             ->route(
@@ -51,24 +67,35 @@ class ProdutoImagemController extends Controller
 
 
     /**
-     * Exclui uma imagem.
+     * Exclui uma imagem do R2.
      */
     public function destroy(
         ProdutoImagem $imagem
     ) {
         $produto = $imagem->produto;
 
-        if (
-            $imagem->imagem &&
-            Storage::disk('public')->exists(
-                $imagem->imagem
-            )
-        ) {
-            Storage::disk('public')
+
+        /*
+        |--------------------------------------------------------------------------
+        | Remove arquivo do Cloudflare R2
+        |--------------------------------------------------------------------------
+        */
+
+        if ($imagem->imagem) {
+
+            Storage::disk('r2')
                 ->delete($imagem->imagem);
         }
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Remove registro do banco
+        |--------------------------------------------------------------------------
+        */
+
         $imagem->delete();
+
 
         return redirect()
             ->route(

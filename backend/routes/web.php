@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CategoriaController;
@@ -10,6 +12,7 @@ use App\Http\Controllers\Admin\EstoqueController;
 use App\Http\Controllers\Admin\PedidoController;
 use App\Http\Controllers\Admin\RelatorioController;
 use App\Http\Controllers\Admin\CarrosselController;
+
 
 use App\Http\Controllers\CatalogoController;
 
@@ -269,3 +272,19 @@ Route::middleware('auth')
         )->name('carrossel.toggle');
     });
 
+
+Route::get('/teste-r2', function () {
+
+    $arquivo = 'teste/smartcatalog.txt';
+
+    Storage::disk('r2')->put(
+        $arquivo,
+        'SmartCatalog funcionando com Cloudflare R2!'
+    );
+
+    return response()->json([
+        'sucesso' => true,
+        'arquivo' => $arquivo,
+    ]);
+
+});

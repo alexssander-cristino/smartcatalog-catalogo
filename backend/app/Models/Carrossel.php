@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Carrossel extends Model
 {
@@ -19,6 +20,12 @@ class Carrossel extends Model
 
     protected $casts = [
         'ativo' => 'boolean',
-        'ordem' => 'integer',
     ];
+
+    public function getUrlAttribute()
+    {
+        return Storage::disk('r2')->url(
+            $this->arquivo
+        );
+    }
 }
